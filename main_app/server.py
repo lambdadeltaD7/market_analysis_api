@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from endpoints.user_endpoints import *
-from endpoints.thing_enpoints import *
+from endpoints.thing_endpoints import *
 from endpoints.sale_endpoints import *
 
 app = FastAPI()
