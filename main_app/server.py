@@ -3,6 +3,10 @@ from endpoints.user_endpoints import *
 from endpoints.thing_endpoints import *
 from endpoints.sale_endpoints import *
 
+# TODO: versions
+# linreg
+# summary 
+
 app = FastAPI()
 
 app.post("/api/v1/users")(add_user)
@@ -20,6 +24,7 @@ app.delete("/api/v1/things/{thing_id}")(delete_thing)
 app.delete("/api/v1/things")(delete_things)
 
 app.post("/api/v1/sales")(add_sale)
+app.post("/api/v1/sales/generate_sales")(generate_sales)
 app.get("/api/v1/sales")(get_sales)
 app.get("/api/v1/sales/{sale_id}")(get_sale)
 app.delete("/api/v1/sales/{sale_id}")(delete_sale)
