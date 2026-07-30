@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
 import numpy as np
-
+import pandas as pd
 
 def add_thing(thing: Thing):
     with Session(sql_engine) as ses:
@@ -36,6 +36,25 @@ def generate_things(count: int):
             ses.refresh(t)
 
     return things
+
+
+def get_things_summary():
+    with Session(sql_engine) as ses:
+        stmt = select(DbThing.category, DbThing.price)
+        things = ses.execute(stmt).all()
+
+    df = pd.DataFrame([(c,p) for c,p in things], columns=["cat","price"])
+    df["price"] = pd.to_numeric(df["price"])
+
+    d = dict()
+    d['cnt_things'] = df.shape[0]
+    for cat in df['cat'].unique():
+        d[cat] = dict()
+        d[cat]["price_quartiles"] = df[df['cat']==cat]['price'].quantile([0.25,0.5,0.75])
+        d[cat]["cnt_things"] = df[df['cat']==cat].shape[0]
+        d[cat]["frac_things"] = df[df['cat']==cat].shape[0] / df.shape[0]
+
+    return d
 
 
 def get_things():

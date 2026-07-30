@@ -1,4 +1,4 @@
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
@@ -75,6 +75,61 @@ def generate_sales(count: int):
             ses.refresh(s)
 
     return sales
+
+def get_sales_summary():
+
+    d = dict()
+
+    with Session(sql_engine) as ses:
+        stmt = text("SELECT COUNT(*) FROM sales")
+        res = ses.execute(stmt).one()
+        d["cnt_sales"] = res._data[0]
+
+        stmt = text("SELECT user_id, COUNT(*) FROM sales GROUP BY user_id")
+        res = ses.execute(stmt).all()
+        d["avg_sales_per_user"] = np.mean([cnt for uid,cnt in res])
+
+        stmt = text("""
+                    SELECT user_id, COUNT(*) AS cnt
+                    FROM sales
+                    GROUP BY user_id
+                    ORDER BY cnt DESC
+                    LIMIT 5
+                    """)
+        res = ses.execute(stmt).all()
+        d["most_active_users"] = [ {"user_id":uid, "cnt_sales":cnt} for uid,cnt in res ]
+        
+        stmt = text("""
+                    SELECT thing_id, COUNT(*) AS cnt
+                    FROM sales
+                    GROUP BY thing_id
+                    ORDER BY cnt DESC
+                    LIMIT 5
+                    """)
+        res = ses.execute(stmt).all()
+        d["most_popular_things"] = [ {"thing_id":tid, "cnt_sales":cnt} for tid,cnt in res ]
+
+        stmt = text("""
+                    SELECT t.category, COUNT(*) as cnt 
+                    FROM sales s   
+                    LEFT JOIN things t ON t.thing_id=s.thing_id
+                    GROUP BY t.category 
+                    ORDER BY cnt DESC
+                    """)
+        res = ses.execute(stmt).all()
+        d["cnt_per_category"] = {cat:cnt for cat,cnt in res}
+        d["frac_per_category"] = {cat:cnt / d["cnt_sales"] for cat,cnt in res}
+
+        stmt = text("""
+                    SELECT payment_type, COUNT(*)
+                    FROM sales
+                    GROUP BY payment_type
+                    """)
+        res = ses.execute(stmt).all()
+        d["cnt_payment_type"] = {pt:cnt for pt,cnt in res}
+        d["frac_payment_type"] = {pt:cnt / d["cnt_sales"] for pt,cnt in res}
+    
+    return d
 
 
 def get_sales():

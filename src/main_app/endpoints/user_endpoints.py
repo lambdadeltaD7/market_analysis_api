@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
 import numpy as np
-
+import pandas as pd
 
 def add_user(user: User):
     with Session(sql_engine) as ses:
@@ -39,6 +39,23 @@ def generate_users(count: int):
             ses.refresh(u)
 
     return users
+
+
+
+def get_users_summary():
+    with Session(sql_engine) as ses:
+        stmt = select(DbUser.user_age, DbUser.bought_premium)
+        users = ses.execute(stmt).all()
+
+    df = pd.DataFrame([(age,prem) for age,prem in users], columns=["age","prem"])
+    res = dict()
+
+    res["cnt_users"] = df.shape[0]
+    res["cnt_premium_users"] = float(df["prem"].sum())
+    res["frac_premium_users"] = df["prem"].mean()
+    res["quartiles(age)"] = df["age"].quantile([0.25, 0.5, 0.75])
+    
+    return res
 
 
 def get_users():
