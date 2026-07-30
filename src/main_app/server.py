@@ -3,10 +3,6 @@ from endpoints.user_endpoints import *
 from endpoints.thing_endpoints import *
 from endpoints.sale_endpoints import *
 
-# TODO: versions
-# linreg
-# summary 
-
 app = FastAPI()
 
 app.post("/api/v1/users")(add_user)
