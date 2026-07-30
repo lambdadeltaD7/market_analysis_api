@@ -52,6 +52,13 @@ def delete_user(user_id: int):
         ses.commit()
     return {"log": f"deleted {result.rowcount} rows" }
 
+@app.delete("/api/v1/users")
+def delete_users():
+    with Session(sql_engine) as ses:
+        stmt = delete(DbUser)
+        result = ses.execute(stmt)
+        ses.commit()
+    return {"log": f"deleted {result.rowcount} rows" }
 
 
 @app.post("/api/v1/things")
@@ -84,6 +91,14 @@ def get_thing(thing_id: int):
 def delete_thing(thing_id: int):
     with Session(sql_engine) as ses:
         stmt = delete(DbThing).where(DbThing.thing_id == thing_id)
+        res = ses.execute(stmt)
+        ses.commit() 
+    return f"deleted {res.rowcount} rows"
+
+@app.delete("/api/v1/things")
+def delete_thing():
+    with Session(sql_engine) as ses:
+        stmt = delete(DbThing)
         res = ses.execute(stmt)
         ses.commit() 
     return f"deleted {res.rowcount} rows"
@@ -124,3 +139,10 @@ def delete_sale(sale_id: int):
         ses.commit()
     return f"deleted {res.rowcount} rows"
 
+@app.delete("/api/v1/sales")
+def delete_sales():
+    with Session(sql_engine) as ses:
+        stmt = delete(DbSale)
+        res = ses.execute(stmt)
+        ses.commit()
+    return f"deleted {res.rowcount} rows"
