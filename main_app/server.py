@@ -6,6 +6,7 @@ from endpoints.sale_endpoints import *
 app = FastAPI()
 
 app.post("/api/v1/users")(add_user)
+app.post("/api/v1/users/generate_useres")(generate_users)
 app.get("/api/v1/users")(get_users)
 app.get("/api/v1/users/{user_id}")(get_user)
 app.delete("/api/v1/users/{user_id}")(delete_user)

@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
-
+import numpy as np
 
 def add_user(user: User):
     with Session(sql_engine) as ses:
@@ -12,6 +12,30 @@ def add_user(user: User):
         ses.refresh(obj)
     return obj.to_dict()
 
+def generate_users(count: int):
+    users = []
+    for _ in range(count):
+        d=dict()
+
+        d["user_name"] = np.random.choice(["makise ", "alex ", "mittermier ", "yui "]) + \
+        np.random.choice(["von loeingram", "hirasawsa",
+                         "le monon","lando"])
+
+        d["user_age"] = np.random.randint(1,99)
+
+        if d["user_age"] > 18:
+            d["bought_premium"] = np.random.choice([True,False],p=[0.7, 0.3])
+        else:
+            d["bought_premium"] = np.random.choice([True,False],p=[0.3, 0.7])
+
+        users.append(DbUser(**d))
+
+    with Session(sql_engine) as ses:
+        ses.add_all(users)
+        ses.commit()
+        for u in users:
+            ses.refresh(u)
+    return users
 
 def get_users():
     with Session(sql_engine) as ses:
