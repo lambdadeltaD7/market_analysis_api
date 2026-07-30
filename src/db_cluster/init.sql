@@ -18,3 +18,15 @@ CREATE TABLE IF NOT EXISTS sales(
     count INT,
     payment_type varchar(64)
 );
+
+CREATE TABLE IF NOT EXISTS clusters(
+    row_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INT,
+    cluster INT,
+    cnt_sales INT,
+    avg_price NUMERIC,
+    med_price NUMERIC,
+    user_age INT,
+    bought_premium BOOLEAN,
+    mode_category varchar(32)
+)

@@ -19,9 +19,14 @@ app.post("/api/v1/users",
         используйте /api/v1/users/generate_users
         """)(add_user)
 app.post("/api/v1/users/generate_users")(generate_users)
+app.post("/api/v1/users/cluster_users",
+ summary="Провести кластеризацию пользователей",
+ description="Возвращает список центроид кластеров")(cluster_users)
 app.get("/api/v1/users/summary")(get_users_summary)
 app.get("/api/v1/users")(get_users)
 app.get("/api/v1/users/{user_id}")(get_user)
+app.get("/api/v1/users/clusters/{cluster_ix}", 
+summary="Получить всех пользователей из кластера")(get_cluster)
 app.delete("/api/v1/users/{user_id}")(delete_user)
 app.delete("/api/v1/users")(delete_users)
 

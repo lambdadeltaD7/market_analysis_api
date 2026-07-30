@@ -1,9 +1,80 @@
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
+from logic import do_cluster
 import numpy as np
 import pandas as pd
+
+
+def get_cluster(cluster_ix: int):
+    with Session(sql_engine) as ses:
+        query = text(f"SELECT * FROM clusters where cluster={cluster_ix}")
+        raw = ses.execute(query).all()
+
+    if len(raw)==0:
+        return f"there is no cluster with cluster_ix={cluster_ix}"
+
+    users = []
+
+    for x in raw:
+        d = dict()
+        d["user_id"] = x[1]
+        d["cluster"] = x[2]
+        d["cnt_sales"] = x[3]
+        d["avg_price"] = x[4]
+        d["med_price"] = x[5]
+        d["user_age"] = x[6]
+        d["bought_premium"] = x[7]
+        d["mode_category"] = x[8]
+        users.append(d)
+
+    return {"cluster_size":len(raw), "users":users}
+
+def cluster_users(n_clusters: int):
+    with Session(sql_engine) as ses:
+
+        query = text("TRUNCATE TABLE clusters;")
+        ses.execute(query)
+
+        query = text("""
+            SELECT
+            s.user_id,
+            COUNT(*),
+            AVG(t.price),
+            percentile_cont(0.5) WITHIN GROUP(ORDER BY t.price),
+            u.user_age,
+            u.bought_premium,
+            MODE() WITHIN GROUP(ORDER BY t.category)
+            FROM sales s
+            LEFT JOIN users u ON s.user_id=u.user_id
+            LEFT JOIN things t ON t.thing_id=s.thing_id
+            GROUP BY s.user_id, u.user_age, u.bought_premium
+        """)
+        res = ses.execute(query).all()
+
+        ses.commit()
+
+    df = pd.DataFrame([x for x in res], 
+                     columns=['user_id', 'cnt_sales', 'avg_price', 
+                            'med_price', 'user_age', 'bought_premium',
+                            'mode_category'])
+    for col in ['user_id', 'med_price', 'cnt_sales', 'avg_price','user_age']:
+        df[col] = pd.to_numeric(df[col])
+
+    centroids, labels = do_cluster(df, n_clusters)
+
+    df["cluster"] = labels
+
+    df.to_sql(
+        name="clusters",
+        index=False,
+        con = sql_engine,
+        if_exists="append"
+    )
+
+    return centroids
+
 
 def add_user(user: User):
     with Session(sql_engine) as ses:

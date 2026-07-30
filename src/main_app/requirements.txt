@@ -3,6 +3,7 @@ uvicorn
 psycopg[binary]
 sqlalchemy
 pydantic
+scipy
 numpy
 pandas
 requests
