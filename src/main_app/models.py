@@ -27,9 +27,9 @@ class DbUser(DbBase):
 
 
 class User(BaseModel):
-    user_name: str = Field(max_length=10)
-    user_age: int = Field(ge=0, le=100)
-    bought_premium: bool 
+    user_name: str = Field(max_length=10, description="Имя пользователя")
+    user_age: int = Field(ge=0, le=100, description="Возраст пользователя")
+    bought_premium: bool =  Field(description="Указывает, приобрёл ли пользователь премиум")
 
 
 

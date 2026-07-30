@@ -3,9 +3,21 @@ from endpoints.user_endpoints import *
 from endpoints.thing_endpoints import *
 from endpoints.sale_endpoints import *
 
-app = FastAPI()
+app = FastAPI(title="Market Simulation API",
+            description="""
+            SOME DESCR HERE
+            SOME DESCR HERE
+            SOME DESCR HERE
+            SOME DESCR HERE
+            """)
 
-app.post("/api/v1/users")(add_user)
+app.post("/api/v1/users",
+        summary="Добавить нового пользователя",
+        description="""
+        Позволяет руками добавить нового пользователя.
+        Если нужно добавить много пользователей сразу,
+        используйте /api/v1/users/generate_users
+        """)(add_user)
 app.post("/api/v1/users/generate_users")(generate_users)
 app.get("/api/v1/users/summary")(get_users_summary)
 app.get("/api/v1/users")(get_users)
@@ -23,7 +35,9 @@ app.delete("/api/v1/things")(delete_things)
 
 app.post("/api/v1/sales")(add_sale)
 app.post("/api/v1/sales/generate_sales")(generate_sales)
-app.get("/api/v1/sales/summary")(get_sales_summary)
+app.get("/api/v1/sales/summary",
+        summary="Сводка по продажам",
+        description="Целая куча ПОЛЕЗНОЙ информации")(get_sales_summary)
 app.get("/api/v1/sales")(get_sales)
 app.get("/api/v1/sales/{sale_id}")(get_sale)
 app.delete("/api/v1/sales/{sale_id}")(delete_sale)

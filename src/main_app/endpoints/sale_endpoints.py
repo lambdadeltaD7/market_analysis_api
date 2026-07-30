@@ -48,13 +48,13 @@ def generate_sales(count: int):
                 list(old_preferences.keys()),
                 p=list(old_preferences.values()))
             payment_type = np.random.choice(['card','nalik'],
-                                            p=[0.3,0.7])
+                                            p=[0.4,0.6])
         else:
             pref_cat = np.random.choice(
                 list(young_preferences.keys()),
                 p=list(young_preferences.values()))
             payment_type = np.random.choice(['card','nalik'],
-                                            p=[0.7,0.3])
+                                            p=[0.6,0.4])
 
         if pref_cat not in t_dict.keys():
             pref_cat = list(t_dict.keys())[0]

@@ -26,9 +26,9 @@ def generate_users(count: int):
         d["user_age"] = np.random.randint(1,99)
 
         if d["user_age"] > 18:
-            d["bought_premium"] = np.random.choice([True,False],p=[0.7, 0.3])
+            d["bought_premium"] = np.random.choice([True,False],p=[0.52, 0.48])
         else:
-            d["bought_premium"] = np.random.choice([True,False],p=[0.3, 0.7])
+            d["bought_premium"] = np.random.choice([True,False],p=[0.48, 0.52])
 
         users.append(DbUser(**d))
 
