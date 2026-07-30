@@ -2,6 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
+import numpy as np
 
 
 def add_thing(thing: Thing):
@@ -11,6 +12,30 @@ def add_thing(thing: Thing):
         ses.commit()
         ses.refresh(obj)
     return obj.to_dict()
+
+
+def generate_things(count: int):
+    things = []
+    means = {'electronics':6000, 'food':1000,
+             'clothes':4000, 'toys':6000, 'weapons':8000}
+
+    for _ in range(count):
+        d = dict()
+        d['category'] = np.random.choice(
+            ['electronics', 'food', 'clothes', 'toys', 'weapons'])
+
+        d['price'] = min(int(np.random.normal(
+            loc=means[d['category']],scale=1000)), 10000)
+            
+        things.append(DbThing(**d))
+
+    with Session(sql_engine) as ses:
+        ses.add_all(things)
+        ses.commit()
+        for t in things:
+            ses.refresh(t)
+
+    return things
 
 
 def get_things():

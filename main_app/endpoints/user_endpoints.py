@@ -4,6 +4,7 @@ from models import *
 from db import sql_engine
 import numpy as np
 
+
 def add_user(user: User):
     with Session(sql_engine) as ses:
         obj = DbUser(**user.model_dump())
@@ -11,6 +12,7 @@ def add_user(user: User):
         ses.commit()
         ses.refresh(obj)
     return obj.to_dict()
+
 
 def generate_users(count: int):
     users = []
@@ -35,7 +37,9 @@ def generate_users(count: int):
         ses.commit()
         for u in users:
             ses.refresh(u)
+
     return users
+
 
 def get_users():
     with Session(sql_engine) as ses:
