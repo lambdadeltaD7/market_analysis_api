@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+from collections import Counter
 from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
@@ -6,11 +8,14 @@ import numpy as np
 
 def add_sale(sale: Sale):
     with Session(sql_engine) as ses:
-        obj = DbSale(**sale.dict())
+        d = sale.dict()
+        if d["sale_time"] is None:
+            d["sale_time"] = datetime.now()
+        obj = DbSale(**d)
         ses.add(obj)
         ses.commit()
         ses.refresh(obj)
-    return obj
+    return obj.to_dict()
 
 
 def generate_sales(count: int):
@@ -65,6 +70,11 @@ def generate_sales(count: int):
         d["thing_id"] = tid
         d["count"] = np.random.randint(1,10)
         d["payment_type"] = payment_type
+        d["sale_time"] = datetime.now() - timedelta(
+            days=np.random.randint(0, 30),
+            hours=np.random.randint(0, 24),
+            minutes=np.random.randint(0, 60),
+        )
 
         sales.append(DbSale(**d))
         
@@ -128,6 +138,24 @@ def get_sales_summary():
         res = ses.execute(stmt).all()
         d["cnt_payment_type"] = {pt:cnt for pt,cnt in res}
         d["frac_payment_type"] = {pt:cnt / d["cnt_sales"] for pt,cnt in res}
+
+        stmt = text("SELECT sale_time FROM sales")
+        res = ses.execute(stmt).all()
+        times = [x[0] for x in res if x[0] is not None]
+
+        if times:
+            d["earliest_sale_time"] = min(times).isoformat()
+            d["latest_sale_time"] = max(times).isoformat()
+            span_days = max((max(times) - min(times)).days, 1)
+            d["avg_sales_per_day"] = len(times) / span_days
+            d["avg_sales_per_hour"] = len(times) / (span_days * 24)
+            hour_counts = Counter(t.hour for t in times)
+            day_counts = Counter(t.date() for t in times)
+            d["most_active_hour"] = hour_counts.most_common(1)[0][0]
+            d["most_active_date"] = day_counts.most_common(1)[0][0].isoformat()
+        else:
+            d["earliest_sale_time"] = None
+            d["latest_sale_time"] = None
     
     return d
 

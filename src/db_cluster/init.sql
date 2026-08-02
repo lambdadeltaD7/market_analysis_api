@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS sales(
     user_id INT,
     thing_id INT,
     count INT,
-    payment_type varchar(64)
+    payment_type varchar(64),
+    sale_time TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS clusters(

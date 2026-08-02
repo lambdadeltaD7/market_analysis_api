@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Literal
 from sqlalchemy import create_engine, select, delete
@@ -56,17 +57,19 @@ class DbSale(DbBase):
     thing_id: Mapped[int]
     count: Mapped[int]
     payment_type: Mapped[str]
+    sale_time: Mapped[datetime]
 
     def to_dict(self) -> dict:
         return {"sale_id": self.sale_id, "user_id": self.user_id,
                 "thing_id": self.thing_id, "count": self.count, 
-                "payment_type": self.payment_type}
+                "payment_type": self.payment_type, "sale_time": self.sale_time}
 
 class Sale(BaseModel):
     user_id: int
     thing_id: int
     count: int = Field(ge=1, le=67)
     payment_type: Literal['card', 'nalik']
+    sale_time: datetime | None = None
 
 
 
