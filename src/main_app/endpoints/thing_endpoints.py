@@ -1,3 +1,4 @@
+from fastapi import Query
 from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from models import *
@@ -57,9 +58,9 @@ def get_things_summary():
     return d
 
 
-def get_things(limit: int = 100, offset: int = 0):
+def get_things(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbThing).offset(offset).limit(limit)
+        stmt = select(DbThing).order_by(DbThing.thing_id).offset(offset).limit(limit)
         things = ses.scalars(stmt).all()
     return [t.to_dict() for t in things]
 

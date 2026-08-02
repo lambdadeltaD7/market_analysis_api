@@ -1,3 +1,4 @@
+from fastapi import Query
 from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
@@ -129,9 +130,9 @@ def get_users_summary():
     return res
 
 
-def get_users(limit: int = 100, offset: int = 0):
+def get_users(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbUser).offset(offset).limit(limit)
+        stmt = select(DbUser).order_by(DbUser.user_id).offset(offset).limit(limit)
         users = ses.scalars(stmt).all()
     return [u.to_dict() for u in users]
 

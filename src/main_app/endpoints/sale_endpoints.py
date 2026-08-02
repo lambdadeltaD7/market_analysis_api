@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from collections import Counter
+from fastapi import Query
 from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
@@ -160,9 +161,9 @@ def get_sales_summary():
     return d
 
 
-def get_sales(limit: int = 100, offset: int = 0):
+def get_sales(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbSale).offset(offset).limit(limit)
+        stmt = select(DbSale).order_by(DbSale.sale_id).offset(offset).limit(limit)
         sales = ses.scalars(stmt).all()
     return [s.to_dict() for s in sales]
 
