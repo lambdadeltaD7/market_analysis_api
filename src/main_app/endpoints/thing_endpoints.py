@@ -35,7 +35,7 @@ def generate_things(count: int):
         for t in things:
             ses.refresh(t)
 
-    return [t.to_dict() for t in things]
+    return [t.to_dict() for t in things[:10]]
 
 
 def get_things_summary():
@@ -57,9 +57,9 @@ def get_things_summary():
     return d
 
 
-def get_things():
+def get_things(limit: int = 100, offset: int = 0):
     with Session(sql_engine) as ses:
-        stmt = select(DbThing)
+        stmt = select(DbThing).offset(offset).limit(limit)
         things = ses.scalars(stmt).all()
     return [t.to_dict() for t in things]
 

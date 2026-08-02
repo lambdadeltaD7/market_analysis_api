@@ -84,7 +84,7 @@ def generate_sales(count: int):
         for s in sales:
             ses.refresh(s)
 
-    return [s.to_dict() for s in sales]
+    return [s.to_dict() for s in sales[:10]]
 
 def get_sales_summary():
 
@@ -160,9 +160,9 @@ def get_sales_summary():
     return d
 
 
-def get_sales():
+def get_sales(limit: int = 100, offset: int = 0):
     with Session(sql_engine) as ses:
-        stmt = select(DbSale)
+        stmt = select(DbSale).offset(offset).limit(limit)
         sales = ses.scalars(stmt).all()
     return [s.to_dict() for s in sales]
 

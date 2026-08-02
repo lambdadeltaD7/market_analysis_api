@@ -109,7 +109,7 @@ def generate_users(count: int):
         for u in users:
             ses.refresh(u)
 
-    return [u.to_dict() for u in users]
+    return [u.to_dict() for u in users[:10]]
 
 
 
@@ -129,9 +129,9 @@ def get_users_summary():
     return res
 
 
-def get_users():
+def get_users(limit: int = 100, offset: int = 0):
     with Session(sql_engine) as ses:
-        stmt = select(DbUser)
+        stmt = select(DbUser).offset(offset).limit(limit)
         users = ses.scalars(stmt).all()
     return [u.to_dict() for u in users]
 
