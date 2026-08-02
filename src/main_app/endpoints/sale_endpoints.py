@@ -28,7 +28,7 @@ def generate_sales(count: int):
         
 
         if len(available_things) * len(available_users) == 0:
-            return "you need to add items and users before that..."
+            return {"error": "you need to add items and users before that..."}
 
     t_dict = dict()
     for tid,cat in available_things:
@@ -84,7 +84,7 @@ def generate_sales(count: int):
         for s in sales:
             ses.refresh(s)
 
-    return sales
+    return [s.to_dict() for s in sales]
 
 def get_sales_summary():
 
@@ -174,7 +174,7 @@ def get_sale(sale_id: int):
     if sale:
         return sale.to_dict()
     else:
-        return f"there is no sale with sale_id={sale_id}"
+        return {"error": f"there is no sale with sale_id={sale_id}"}
 
 
 def delete_sale(sale_id: int):
@@ -182,7 +182,7 @@ def delete_sale(sale_id: int):
         stmt = delete(DbSale).where(DbSale.sale_id == sale_id)
         res = ses.execute(stmt)
         ses.commit()
-    return f"deleted {res.rowcount} rows"
+    return {"log": f"deleted {res.rowcount} rows"}
 
 
 def delete_sales():
@@ -190,4 +190,4 @@ def delete_sales():
         stmt = delete(DbSale)
         res = ses.execute(stmt)
         ses.commit()
-    return f"deleted {res.rowcount} rows"
+    return {"log": f"deleted {res.rowcount} rows"}

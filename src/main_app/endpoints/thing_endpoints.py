@@ -35,7 +35,7 @@ def generate_things(count: int):
         for t in things:
             ses.refresh(t)
 
-    return things
+    return [t.to_dict() for t in things]
 
 
 def get_things_summary():
@@ -71,7 +71,7 @@ def get_thing(thing_id: int):
     if res:
         return res.to_dict()
     else:
-        return f"there is no thing with thing_id={thing_id}"
+        return {"error": f"there is no thing with thing_id={thing_id}"}
 
 
 def delete_thing(thing_id: int):
@@ -79,7 +79,7 @@ def delete_thing(thing_id: int):
         stmt = delete(DbThing).where(DbThing.thing_id == thing_id)
         res = ses.execute(stmt)
         ses.commit() 
-    return f"deleted {res.rowcount} rows"
+    return {"log": f"deleted {res.rowcount} rows"}
 
 
 def delete_things():
@@ -87,4 +87,4 @@ def delete_things():
         stmt = delete(DbThing)
         res = ses.execute(stmt)
         ses.commit() 
-    return f"deleted {res.rowcount} rows"
+    return {"log": f"deleted {res.rowcount} rows"}

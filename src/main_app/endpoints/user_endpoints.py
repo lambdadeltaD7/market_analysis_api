@@ -13,7 +13,7 @@ def get_cluster(cluster_ix: int):
         raw = ses.execute(query).all()
 
     if len(raw)==0:
-        return f"there is no cluster with cluster_ix={cluster_ix}"
+        return {"error": f"there is no cluster with cluster_ix={cluster_ix}"}
 
     users = []
 
@@ -109,7 +109,7 @@ def generate_users(count: int):
         for u in users:
             ses.refresh(u)
 
-    return users
+    return [u.to_dict() for u in users]
 
 
 
