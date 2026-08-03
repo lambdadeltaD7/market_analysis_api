@@ -1,7 +1,7 @@
 
 services:
   db_cluster:
-    build: ./src/db_cluster
+    build: ./src/backend/db_cluster
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -10,7 +10,7 @@ services:
       - 8002:5432
 
   main_app:
-    build: ./src/main_app
+    build: ./src/backend/main_app
     env_file:
       - .env
     ports:
