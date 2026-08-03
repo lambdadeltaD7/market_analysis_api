@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from endpoints.user_endpoints import *
 from endpoints.thing_endpoints import *
 from endpoints.sale_endpoints import *
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Market Simulation API",
             description="""
@@ -11,6 +12,14 @@ app = FastAPI(title="Market Simulation API",
             генерировать синтетические данные и получать сводную
             аналитику (включая кластеризацию пользователей).
             """)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.post("/api/v1/users",
         summary="Добавить нового пользователя",

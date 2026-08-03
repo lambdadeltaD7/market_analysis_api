@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <title> Web version of API </title>
+
+        <link rel="stylesheet" src="../css/cool.css">
+
+        <script src="../js/users.js" defer></script>
+
+    </head>
+
+    <body>
+        
+        <!-- generate new users -->
+        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
+            <h1 style="border-bottom: 5px solid black;"> /users/generate_users </h1>
+            <input id="cnt_gen_users" type="number" placeholder="count">
+            <button id="gen_users_btn"> generate users </button>
+        </div>
+
+        <!-- get batch of users -->
+        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
+            <h1 style="border-bottom: 5px solid black;"> /users GET </h1>
+
+            <input id="users_count" type="number" placeholder="count">
+            <input id="users_offset" type="number" placeholder="offset">
+            <button id="users_load_btn">load users</button>
+            <button id="users_clean_btn">clean users table</button>
+            
+            <table id="users_table" border="1">
+                <thead>
+                <caption>batch of users</caption>
+                <tr>
+                    <th>user_id</th>
+                    <th>user_name</th>
+                    <th>user_age</th>
+                    <th>bought_premium</th> 
+                </tr>
+                </thead>
+
+                <tbody id="users_table_body">
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- get user by id -->
+        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
+            <h1 style="border-bottom: 5px solid black;"> /users?user_id=... GET </h1>
+            <input id="user_id_get_input" type="number" placeholder="user_id">
+            <button id="user_id_get_btn">get user</button>
+
+            <div id="user_card" style="border: 5px solid black; display: none;">
+            </div>
+        </div>
+
+        <!-- delete all users -->
+        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
+            <h1 style="border-bottom: 5px solid black;"> /users DELETE </h1>
+            <button id="user_delete_all_btn">delete all users</button>
+        </div>
+
+        <!-- delete user by id -->
+        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
+            <h1 style="border-bottom: 5px solid black;"> /users?user_id=... DELETE </h1>
+            <input id="user_id_delete_input" type="number" placeholder="user_id">
+            <button id="user_id_delete_btn">delete user</button>
+            </div>
+        </div>
+
+    </body>
+
+</html>

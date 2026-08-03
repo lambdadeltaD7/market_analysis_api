@@ -1,4 +1,5 @@
 from fastapi import Query
+from fastapi import HTTPException,status
 from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
@@ -144,7 +145,8 @@ def get_user(user_id: int):
     if user:
         return user.to_dict()
     else:
-        return {"error" : f"there is no user with user_id = {user_id}"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                      detail=f"User with user_id = {user_id} not found")
 
 
 def delete_user(user_id: int):
