@@ -45,11 +45,18 @@ FastAPI, SQLAlchemy, PostgreSQL, pydantic, scipy, numpy, pandas, html, javascrip
 
 ```
 src/
-├── db_cluster/   # PostgreSQL + init.sql
-└── main_app/     # FastAPI приложение
-    ├── server.py                 # роутинг
-    ├── models.py                 # SQLAlchemy- и pydantic-модели
-    ├── db.py                     # подключение к БД
-    ├── logic.py                  # кластеризация (kmeans2)
-    └── endpoints/                # обработчики по сущностям
+├── backend/                  # серверная часть
+│   ├── db_cluster/           # PostgreSQL + init.sql
+│   ├── main_app/             # FastAPI приложение
+│   │   ├── server.py         # роутинг
+│   │   ├── models.py         # SQLAlchemy- и pydantic-модели
+│   │   ├── db.py             # подключение к БД
+│   │   ├── logic.py          # кластеризация (kmeans2)
+│   │   └── endpoints/        # обработчики по сущностям
+│   └── nginx_app/            # nginx обёртка
+├── frontend/                 # статика веб-интерфейса
+│   ├── css/
+│   ├── html/
+│   └── js/
+tests/                        # pytest-тесты
 ```
