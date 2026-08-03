@@ -26,18 +26,20 @@ docker compose up
 |--------|------|----------|
 | `db_cluster` | 8002 | PostgreSQL (инициализируется из `src/db_cluster/init.sql`) |
 | `main_app` | 8001 | FastAPI-приложение |
+| `nginx_app` | 8003 | Nginx обёртка на всё это |
 
-Порт 8001 можно перебиндить, отредактировав `docker-compose.yml`.
 
 ## Документация и примеры
 
+- Web interface for API (пока что только для юзеров и без css) `http://localhost:8003/users`
 - Swagger-документация: `http://localhost:8001/docs`
-- API: `http://localhost:8001/api/v1/`
-- Примеры использования: `examples.ipynb`
+- Непосредственный доступ к API: `http://localhost:8001/api/v1/`
+- Доступ к API через Nginx: `http://localhost:8003/api/v1/`
+- Примеры использования API: `examples.ipynb`
 
 ## Технологии
 
-FastAPI, SQLAlchemy, PostgreSQL, pydantic, scipy, numpy, pandas.
+FastAPI, SQLAlchemy, PostgreSQL, pydantic, scipy, numpy, pandas, html, javascript, nginx, docker. 
 
 ## Структура
 

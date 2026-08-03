@@ -1,4 +1,4 @@
-let base_url = "http://127.0.0.1:8001/api/v1";
+let base_url = "/api/v1";
 
 
 const cnt_gen_users = document.getElementById('cnt_gen_users');
