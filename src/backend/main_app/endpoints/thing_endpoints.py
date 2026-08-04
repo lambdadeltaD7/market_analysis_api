@@ -48,6 +48,10 @@ def get_things_summary():
     df = pd.DataFrame([(c,p) for c,p in things], columns=["cat","price"])
     df["price"] = pd.to_numeric(df["price"])
 
+    if df.empty:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                      detail="no things in database")
+
     d = dict()
     d['cnt_things'] = df.shape[0]
     for cat in df['cat'].unique():

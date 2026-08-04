@@ -121,6 +121,11 @@ def get_users_summary():
         users = ses.execute(stmt).all()
 
     df = pd.DataFrame([(age,prem) for age,prem in users], columns=["age","prem"])
+
+    if df.empty:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                      detail="no users in database")
+
     res = dict()
 
     res["cnt_users"] = df.shape[0]

@@ -96,6 +96,10 @@ def get_sales_summary():
         res = ses.execute(stmt).one()
         d["cnt_sales"] = res._data[0]
 
+        if d["cnt_sales"] == 0:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                          detail="no sales in database")
+
         stmt = text("SELECT user_id, COUNT(*) FROM sales GROUP BY user_id")
         res = ses.execute(stmt).all()
         d["avg_sales_per_user"] = np.mean([cnt for uid,cnt in res])
