@@ -114,9 +114,9 @@ users_load_btn.addEventListener('click', async () => {
                 <td>${u.user_id}</td>
                 <td>${u.user_name}</td>
                 <td>${u.user_age}</td>
-                <td>${u.bought_premium}</td>
+                <td class="${u.bought_premium ? 'premium' : 'no-premium'}">${u.bought_premium}</td>
             `;
-
+            
             users_table_body.appendChild(tr);
         }
 
