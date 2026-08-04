@@ -1,9 +1,9 @@
-
-
 :root{
     --clr1: #F4ADC5;
     --clr2: #e596b1e3;
     --clr3: #CF7F96;
+    --clr4: #a95a70;
+    --clr5: #6a2639;
 }
 
 body{
@@ -28,6 +28,25 @@ body{
     border-color: var(--clr3);
 }
 
+.method-card input.error{
+    border-radius: 5px;
+    border-width: 3px;
+    background-color: var(--clr2);
+    border-style: solid;
+    border-color: rgb(241, 63, 63);
+}
+
+.method-card input:focus{
+    border-radius: 5px;
+    border-width: 3px;
+    background-color: var(--clr3);
+    border-style: solid;
+    outline: none;
+    border-color: var(--clr4);
+}
+
+
+
 .method-card input::-webkit-outer-spin-button,
 .method-card input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -39,8 +58,8 @@ body{
 }
 
 .method-card h1{
-    color: var(--clr3);
-    border-bottom: 5px solid var(--clr3);
+    color: var(--clr4);
+    border-bottom: 4px solid var(--clr3);
 }
 
 .method-card table{
@@ -49,17 +68,17 @@ body{
     border-spacing: 0;
     border-style: solid;
     border-width: 3px;
+    margin-top: 15px;
     border-radius: 10px;
     border-color: var(--clr3);
     overflow: hidden;
-    /* table-layout: fixed; */
 }
 
 
 .method-card caption{
     font-size: xx-large;
     font-weight: bold;
-    color: var(--clr3);
+    color: var(--clr4);
 }
 
 
@@ -85,4 +104,68 @@ body{
 
 .method-card td.no-premium{
     background-color: #d67171;
+}
+
+.method-card button{
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    border-color: var(--clr4);
+    background-color: var(--clr2);
+    color: var(--clr5);
+    transition: transform 0.3s ease;
+}
+
+.method-card button:hover{
+    transform: scale(0.95);
+}
+
+
+
+
+/* 1. Настройка самой плашки (окна) */
+div.swal2-popup {
+    background-color: var(--clr2) !important;
+    border: 5px solid var(--clr4) !important; /* Ваша граница */
+    border-radius: 12px !important;               /* Закругление углов */
+    font-family: 'Courier New', Courier, monospace !important; /* Ваш шрифт */
+}
+
+/* 2. Настройка заголовка (Title) */
+h2.swal2-title {
+    color: var(--clr4) !important;
+    font-weight: bold !important;
+}
+
+/* 3. Настройка обычного текста (Html/Text content) */
+div.swal2-html-container {
+    color: #2c2c2c !important;
+    font-size: 1.1em !important;
+}
+
+/* 4. Настройка основной кнопки (Confirm Button) */
+button.swal2-confirm {
+    background-color: var(--clr2) !important;
+    color: var(--clr4) !important;
+    border: 3px solid var(--clr4) !important;
+    border-radius: 8px !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-weight: bold !important;
+    box-shadow: none !important; /* Убираем дефолтную тень */
+    transition: transform 0.2s ease;
+}
+
+/* Эффект при наведении на кнопку */
+button.swal2-confirm:hover {
+    transform: scale(0.95);
+}
+
+/* 5. Настройка иконки (например, галочка успеха или крестик ошибки) */
+.swal2-icon.swal2-success {
+    border-color: var(--clr1) !important;
+    color: var(--clr3) !important;
+}
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+    border-color: var(--clr1) !important;
+    color: var(--clr3) !important;
 }

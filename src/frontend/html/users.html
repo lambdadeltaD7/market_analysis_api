@@ -9,6 +9,7 @@
 
         <link rel="stylesheet" href="../css/cool.css">
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="../js/users.js" defer></script>
 
     </head>
@@ -18,7 +19,7 @@
         <!-- generate new users -->
         <div class="method-card">
             <h1> /users/generate_users </h1>
-            <input id="cnt_gen_users" type="number" placeholder="count">
+            <input id="cnt_gen_users" type="number" placeholder="count" title="cnt_gen_users">
             <button id="gen_users_btn"> generate users </button>
         </div>
 
@@ -26,10 +27,10 @@
         <div class="method-card">
             <h1> /users GET </h1>
 
-            <input id="users_count" type="number" placeholder="count">
-            <input id="users_offset" type="number" placeholder="offset">
+            <input id="users_count" type="number" placeholder="count" title="users_count">
+            <input id="users_offset" type="number" placeholder="offset" title="users_offset">
             <button id="users_load_btn">load users</button>
-            <button id="users_clean_btn">clean users table</button>
+            <button id="users_clean_btn">clean loaded users table</button>
             
             <table id="users_table">
                 <thead>
@@ -52,7 +53,7 @@
         <!-- get user by id -->
         <div class="method-card">
             <h1> /users?user_id=... GET </h1>
-            <input id="user_id_get_input" type="number" placeholder="user_id">
+            <input id="user_id_get_input" type="number" placeholder="user_id" title="user_id">
             <button id="user_id_get_btn">get user</button>
 
             <div id="user_card" style="border: 5px solid black; display: none;">
@@ -68,7 +69,7 @@
         <!-- delete user by id -->
         <div class="method-card">
             <h1> /users?user_id=... DELETE </h1>
-            <input id="user_id_delete_input" type="number" placeholder="user_id">
+            <input id="user_id_delete_input" type="number" placeholder="user_id" title="user_id">
             <button id="user_id_delete_btn">delete user</button>
         </div>
 

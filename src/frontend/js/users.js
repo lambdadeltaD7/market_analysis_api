@@ -30,13 +30,40 @@ for(const num_input_field of [cnt_gen_users, users_offset,
 }
 
 
+function showErr(txt){
+    Swal.fire({
+            icon: 'error',
+            title: 'Input error',
+            text: txt,
+            });
+}
+
+function showToast(txt){
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: txt,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+        });
+}
+
+function higlightInputErr(inputId, timeMs=2000){
+    const inp = document.getElementById(inputId);
+    if (!inp) return;
+    inp.classList.add('error');
+    setTimeout(()=>{inp.classList.remove('error');}, timeMs);
+}
 
 gen_users_btn.addEventListener('click', async () => {
     
     try{
 
         if(cnt_gen_users.value.length==0){
-            alert(`you should specify cnt_gen_users`);
+            higlightInputErr('cnt_gen_users');
+            showErr('you should specify cnt_gen_users');
             throw new Error(`you should specify cnt_gen_users`);
         }
 
@@ -47,7 +74,8 @@ gen_users_btn.addEventListener('click', async () => {
         });
 
         if(cnt>67){
-            alert(`cnt is too big: ${cnt}\n max is 67`);
+            showErr(`cnt is too big: ${cnt}. max is 67`);
+            higlightInputErr('cnt_gen_users');
             throw new Error(`cnt is too big: ${cnt}\nmax is 67`);
         }
         
@@ -60,7 +88,7 @@ gen_users_btn.addEventListener('click', async () => {
         }
 
         console.log(`generated ${cnt} new users`);
-        alert(`generated ${cnt} new users`);
+        showToast(`generated ${cnt} new users`)
     }
     catch(err){
         console.error(`Some error here l2: ${err}`);
@@ -76,17 +104,20 @@ users_clean_btn.addEventListener('click', () => {
 users_load_btn.addEventListener('click', async () => {
     try{
         if(users_count.value.length==0){
-            alert(`you should specify users_count`);
+            showErr(`you should specify users_count`);
+            higlightInputErr('users_count');
             throw new Error(`you should specify users_count`);
         }
 
         if(users_offset.value.length==0){
-            alert(`you should specify users_offset`);
+            showErr(`you should specify users_offset`);
+            higlightInputErr('users_offset');
             throw new Error(`you should specify users_offset`);
         }
 
         if( Number(users_count.value) > 67 ){
-            alert(`${Number(users_count.value)} rows is too many\nmax is 67`);
+            higlightInputErr('users_count');
+            showErr(`${Number(users_count.value)} rows is too many. max is 67`);
             throw new Error(`${Number(users_count.value)} rows is too many\nmax is 67`);
         }
 
@@ -130,7 +161,8 @@ users_load_btn.addEventListener('click', async () => {
 user_id_get_btn.addEventListener('click', async () => {
     try{
         if(user_id_get_input.value.length==0){
-            alert(`you must specify user_id`);
+            showErr(`you must specify user_id`);
+            higlightInputErr('user_id_get_input');
             throw new Error('you must specify user_id');
         }
 
@@ -139,7 +171,7 @@ user_id_get_btn.addEventListener('click', async () => {
         const result = await fetch(base_url + `/users/${uid}`);
 
         if(!result.ok){
-            alert(`err:${result.statusText}`);
+            showErr(`err:${result.statusText}`);
             throw new Error(`err:${result.statusText}`);
         }
         
@@ -165,7 +197,7 @@ user_delete_all_btn.addEventListener('click', async () => {
     try{
         const result = await fetch(base_url + '/users', {method: 'DELETE'});
         const data = await result.json();
-        alert(data.log);
+        showToast(data.log);
     }
     catch(err){
         console.error(`Some error here l2: ${err}`);
@@ -176,7 +208,8 @@ user_delete_all_btn.addEventListener('click', async () => {
 user_id_delete_btn.addEventListener('click', async () => {
     try{
         if(user_id_delete_input.value.length==0){
-            alert(`you must specify user_id`);
+            showErr(`you must specify user_id`);
+            higlightInputErr('user_id_delete_input');
             throw new Error('you must specify user_id');
         }
 
@@ -184,7 +217,7 @@ user_id_delete_btn.addEventListener('click', async () => {
             base_url + `/users/${Number(user_id_delete_input.value)}`,
              {method: 'DELETE'});
         const data = await result.json();
-        alert(data.log);
+        showToast(data.log);
     }
     catch(err){
         console.error(`Some error here l2: ${err}`);
