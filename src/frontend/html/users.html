@@ -16,22 +16,22 @@
     <body>
         
         <!-- generate new users -->
-        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
-            <h1 style="border-bottom: 5px solid black;"> /users/generate_users </h1>
+        <div class="method-card">
+            <h1> /users/generate_users </h1>
             <input id="cnt_gen_users" type="number" placeholder="count">
             <button id="gen_users_btn"> generate users </button>
         </div>
 
         <!-- get batch of users -->
-        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
-            <h1 style="border-bottom: 5px solid black;"> /users GET </h1>
+        <div class="method-card">
+            <h1> /users GET </h1>
 
             <input id="users_count" type="number" placeholder="count">
             <input id="users_offset" type="number" placeholder="offset">
             <button id="users_load_btn">load users</button>
             <button id="users_clean_btn">clean users table</button>
             
-            <table id="users_table" border="1">
+            <table id="users_table">
                 <thead>
                 <caption>batch of users</caption>
                 <tr>
@@ -50,8 +50,8 @@
         </div>
 
         <!-- get user by id -->
-        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
-            <h1 style="border-bottom: 5px solid black;"> /users?user_id=... GET </h1>
+        <div class="method-card">
+            <h1> /users?user_id=... GET </h1>
             <input id="user_id_get_input" type="number" placeholder="user_id">
             <button id="user_id_get_btn">get user</button>
 
@@ -60,17 +60,16 @@
         </div>
 
         <!-- delete all users -->
-        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
-            <h1 style="border-bottom: 5px solid black;"> /users DELETE </h1>
+        <div class="method-card">
+            <h1> /users DELETE </h1>
             <button id="user_delete_all_btn">delete all users</button>
         </div>
 
         <!-- delete user by id -->
-        <div style="border: 5px solid black; border-radius: 10px; padding: 10px; margin: 10px;">
-            <h1 style="border-bottom: 5px solid black;"> /users?user_id=... DELETE </h1>
+        <div class="method-card">
+            <h1> /users?user_id=... DELETE </h1>
             <input id="user_id_delete_input" type="number" placeholder="user_id">
             <button id="user_id_delete_btn">delete user</button>
-            </div>
         </div>
 
     </body>
