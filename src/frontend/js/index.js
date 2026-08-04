@@ -1,5 +1,31 @@
 const gifs = ['200.gif', '201.gif', 'AMA4d7I.gif', 'anime-anime-girl.gif', 'giphy.gif', 'shigure-ui.gif'];
 
+
+const loc_users_a = document.getElementById('loc_users');
+const loc_things_a = document.getElementById('loc_things');
+
+loc_things_a.addEventListener('mousemove', () => {
+    loc_things_a.classList.remove('other_page');
+    loc_things_a.classList.add('current_page');
+});
+
+loc_things_a.addEventListener('mouseleave', () => {
+    loc_things_a.classList.remove('current_page');
+    loc_things_a.classList.add('other_page');
+});
+
+
+loc_users_a.addEventListener('mousemove', () => {
+    loc_users_a.classList.remove('other_page');
+    loc_users_a.classList.add('current_page');
+});
+
+loc_users_a.addEventListener('mouseleave', () => {
+    loc_users_a.classList.remove('current_page');
+    loc_users_a.classList.add('other_page');
+});
+
+
 function pickRandomGif() {
     const idx = Math.floor(Math.random() * gifs.length);
     document.getElementById('random-gif').src = '../img/' + gifs[idx];

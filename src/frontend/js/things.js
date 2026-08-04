@@ -22,6 +22,26 @@ const thing_delete_all_btn = document.getElementById('thing_delete_all_btn');
 const thing_id_delete_input = document.getElementById('thing_id_delete_input');
 const thing_id_delete_btn = document.getElementById('thing_id_delete_btn');
 
+
+const loc_users_a = document.getElementById('loc_users');
+const loc_things_a = document.getElementById('loc_things');
+
+loc_users_a.addEventListener('mousemove', () => {
+    loc_things_a.classList.remove('current_page');
+    loc_things_a.classList.add('other_page');
+
+    loc_users_a.classList.remove('other_page');
+    loc_users_a.classList.add('current_page');
+});
+
+loc_users_a.addEventListener('mouseleave', () => {
+    loc_users_a.classList.remove('current_page');
+    loc_users_a.classList.add('other_page');
+
+    loc_things_a.classList.remove('other_page');
+    loc_things_a.classList.add('current_page');
+});
+
 for(const num_input_field of [cnt_gen_things, things_offset,
      things_count, thing_id_get_input, thing_id_delete_input]){
     num_input_field.addEventListener('input', (e) => {

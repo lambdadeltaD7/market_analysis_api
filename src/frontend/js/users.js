@@ -1,6 +1,5 @@
 let base_url = "/api/v1";
 
-
 const cnt_gen_users = document.getElementById('cnt_gen_users');
 const gen_users_btn = document.getElementById('gen_users_btn');
 cnt_gen_users.value = '13';
@@ -21,6 +20,43 @@ const user_delete_all_btn = document.getElementById('user_delete_all_btn');
 
 const user_id_delete_input = document.getElementById('user_id_delete_input');
 const user_id_delete_btn = document.getElementById('user_id_delete_btn');
+
+const loc_users_a = document.getElementById('loc_users');
+const loc_things_a = document.getElementById('loc_things');
+
+
+loc_users_a.addEventListener('mousemove', () => {
+    loc_things_a.classList.remove('current_page');
+    loc_things_a.classList.add('other_page');
+
+    loc_users_a.classList.remove('other_page');
+    loc_users_a.classList.add('current_page');
+});
+
+loc_users_a.addEventListener('mouseleave', () => {
+    loc_users_a.classList.remove('current_page');
+    loc_users_a.classList.add('other_page');
+
+    loc_things_a.classList.remove('other_page');
+    loc_things_a.classList.add('current_page');
+});
+
+loc_things_a.addEventListener('mousemove', () => {
+    loc_users_a.classList.remove('current_page');
+    loc_users_a.classList.add('other_page');
+
+    loc_things_a.classList.remove('other_page');
+    loc_things_a.classList.add('current_page');
+});
+
+loc_things_a.addEventListener('mouseleave', () => {
+    loc_things_a.classList.remove('current_page');
+    loc_things_a.classList.add('other_page');
+
+    loc_users_a.classList.remove('other_page');
+    loc_users_a.classList.add('current_page');
+});
+
 
 for(const num_input_field of [cnt_gen_users, users_offset,
      users_count, user_id_get_input, user_id_delete_input]){
