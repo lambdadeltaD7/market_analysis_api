@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="../css/cool.css">
 
+    <script src="../js/index.js"></script>
 </head>
 
 
@@ -23,7 +24,24 @@
     </header>
 
     <main class="main-content">
-    <p>text</p>
+        <button class="update-btn" onclick="loadAllSummaries()">update_summary</button>
+        <div class="summary-grid">
+            <div class="summary-card" id="users-summary">
+                <h2>Users</h2>
+                <p>Loading...</p>
+            </div>
+            <div class="summary-card" id="things-summary">
+                <h2>Things</h2>
+                <p>Loading...</p>
+            </div>
+            <div class="summary-card" id="sales-summary">
+                <h2>Sales</h2>
+                <p>Loading...</p>
+            </div>
+        </div>
+        <div class="gif-container">
+            <img id="random-gif" src="" alt="fun gif">
+        </div>
     </main>
 
     <footer>
