@@ -28,6 +28,7 @@ services:
       - ./src/frontend/html:/usr/share/nginx/static/html:ro
       - ./src/frontend/css:/usr/share/nginx/static/css:ro
       - ./src/frontend/js:/usr/share/nginx/static/js:ro
+      - ./src/frontend/img:/usr/share/nginx/static/img:ro
     depends_on:
       - db_cluster
       - main_app
