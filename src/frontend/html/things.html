@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <title> things </title>
+
+        <link rel="icon" href="../img/icon2.png">
+
+        <link rel="stylesheet" href="../css/cool.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../js/things.js" defer></script>
+
+    </head>
+
+    <body>
+        
+        <!-- navigation between instances -->
+        <header>
+            <div class="map-section">
+                <p>Instances: </p>
+                <a class="current_page" href="/things">things</a>
+                <a class="other_page" href="/users">users</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- generate new things -->
+            <div class="method-card">
+                <h1 data-description="Generates a given number of random things with random category and price"> /things/generate_things </h1>
+                <input id="cnt_gen_things" type="number" placeholder="count" 
+                    title="cnt_gen_things">
+                <button id="gen_things_btn"> generate things </button>
+            </div>
+
+            <!-- get batch of things -->
+            <div class="method-card">
+                <h1 data-description="Returns things with pagination. Parameters: count (default 5), offset (default 0)."> /things GET </h1>
+
+                <input id="things_count" type="number" placeholder="count" title="things_count">
+                <input id="things_offset" type="number" placeholder="offset" title="things_offset">
+                <button id="things_load_btn">load things</button>
+                <button id="things_clean_btn">clean loaded things table</button>
+                
+                <table id="things_table">
+                    <thead>
+                    <caption>batch of things</caption>
+                    <tr>
+                        <th>thing_id</th>
+                        <th>thing_category</th>
+                        <th>thing_price</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="things_table_body">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- get thing by id -->
+            <div class="method-card">
+                <h1 data-description="Returns the data of a specific thing by their thing_id."> /things?thing_id=... GET </h1>
+                <input id="thing_id_get_input" type="number" placeholder="thing_id" title="thing_id">
+                <button id="thing_id_get_btn">get thing</button>
+
+                <div id="thing_card" class="thing-card" style="display: none;">
+                </div>
+            </div>
+
+            <!-- delete all things -->
+            <div class="method-card">
+                <h1 data-description="Completely clears the things table."> /things DELETE </h1>
+                <button id="thing_delete_all_btn">delete all things</button>
+            </div>
+
+            <!-- delete thing by id -->
+            <div class="method-card">
+                <h1 data-description="Deletes the thing with the specified thing_id from the database."> /things?thing_id=... DELETE </h1>
+                <input id="thing_id_delete_input" type="number" placeholder="thing_id" title="thing_id">
+                <button id="thing_id_delete_btn">delete thing</button>
+            </div>
+        </main>
+    
+        <footer>
+            <div class="cool-footer">
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 1</p>
+                <p>row 2 col 1</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 2</p>
+                <p>row 2 col 2</p>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+
+</html>

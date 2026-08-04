@@ -2,6 +2,7 @@ from fastapi import Query
 from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from models import *
+from fastapi import HTTPException,status
 from db import sql_engine
 import numpy as np
 import pandas as pd
@@ -72,7 +73,8 @@ def get_thing(thing_id: int):
     if res:
         return res.to_dict()
     else:
-        return {"error": f"there is no thing with thing_id={thing_id}"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                      detail=f"Thing with thing_id = {thing_id} not found")
 
 
 def delete_thing(thing_id: int):

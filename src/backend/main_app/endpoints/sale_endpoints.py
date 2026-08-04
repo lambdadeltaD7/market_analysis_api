@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from collections import Counter
-from fastapi import Query
+from fastapi import Query, HTTPException, status
 from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
@@ -175,7 +175,8 @@ def get_sale(sale_id: int):
     if sale:
         return sale.to_dict()
     else:
-        return {"error": f"there is no sale with sale_id={sale_id}"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                      detail=f"Sale with sale_id = {sale_id} not found")
 
 
 def delete_sale(sale_id: int):

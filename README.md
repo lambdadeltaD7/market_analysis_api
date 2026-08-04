@@ -31,7 +31,7 @@ docker compose up
 
 ## Документация и примеры
 
-- Web interface for API (пока что только для юзеров) `http://localhost:8003/users`
+- Web interface for API `http://localhost:8003/`
 - Swagger-документация: `http://localhost:8001/docs`
 - Непосредственный доступ к API: `http://localhost:8001/api/v1/`
 - Доступ к API через Nginx: `http://localhost:8003/api/v1/`

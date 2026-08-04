@@ -8,6 +8,63 @@
 
 body{
     background-color: var(--clr1);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Занимает минимум 100% видимой высоты экрана */
+}
+
+.main-content {
+    flex: 1 0 auto; 
+}
+
+.cool-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-width: 100%;
+    width: 100%;
+    margin-top: 20px;
+    background-color: var(--clr2);
+    border-top: 5px solid var(--clr3);
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+    gap: 30px;
+}
+
+.map-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-width: 100%;
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: var(--clr2);
+    border-bottom: 5px solid var(--clr3);
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+    gap: 30px;
+}
+
+.map-section p{
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.map-section a.current_page{
+    background-color: var(--clr1);
+    border-style: solid;
+    padding: 5px;
+    border-color: var(--clr3);
+    border-width: 3px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--clr4);
+}
+.map-section a.other_page{
+    text-decoration: none;
+    color: var(--clr4);
 }
 
 .method-card{
@@ -58,6 +115,7 @@ body{
 }
 
 .method-card h1{
+    width: fit-content;
     color: var(--clr4);
     border-bottom: 4px solid var(--clr3);
 }
@@ -175,6 +233,25 @@ button.swal2-confirm:hover {
 }
 
 .user-card p{
+    background-color: var(--clr2);
+    border-style: solid;
+    border-radius: 5px;
+    border-color: var(--clr2);
+}
+
+
+.thing-card{
+    margin-top: 10px;
+    padding: 5px;
+    width: fit-content;
+    border-style: solid;
+    background-color: var(--clr1);
+    border-color: var(--clr4);
+    border-width: 3px;
+    border-radius: 5px;
+}
+
+.thing-card p{
     background-color: var(--clr2);
     border-style: solid;
     border-radius: 5px;

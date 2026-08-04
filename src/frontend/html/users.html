@@ -3,7 +3,7 @@
 <html>
     <head>
 
-        <title> Web version of API </title>
+        <title> users </title>
 
         <link rel="icon" href="../img/icon1.png">
 
@@ -16,63 +16,91 @@
 
     <body>
         
-        <!-- generate new users -->
-        <div class="method-card">
-            <h1 data-description="Generates a given number of random users with random names, ages, and premium purchase flags."> /users/generate_users </h1>
-            <input id="cnt_gen_users" type="number" placeholder="count" 
-                title="cnt_gen_users">
-            <button id="gen_users_btn"> generate users </button>
-        </div>
-
-        <!-- get batch of users -->
-        <div class="method-card">
-            <h1 data-description="Returns users with pagination. Parameters: count (default 5), offset (default 0)."> /users GET </h1>
-
-            <input id="users_count" type="number" placeholder="count" title="users_count">
-            <input id="users_offset" type="number" placeholder="offset" title="users_offset">
-            <button id="users_load_btn">load users</button>
-            <button id="users_clean_btn">clean loaded users table</button>
-            
-            <table id="users_table">
-                <thead>
-                <caption>batch of users</caption>
-                <tr>
-                    <th>user_id</th>
-                    <th>user_name</th>
-                    <th>user_age</th>
-                    <th>bought_premium</th> 
-                </tr>
-                </thead>
-
-                <tbody id="users_table_body">
-
-                </tbody>
-            </table>
-
-        </div>
-
-        <!-- get user by id -->
-        <div class="method-card">
-            <h1 data-description="Returns the data of a specific user by their user_id."> /users?user_id=... GET </h1>
-            <input id="user_id_get_input" type="number" placeholder="user_id" title="user_id">
-            <button id="user_id_get_btn">get user</button>
-
-            <div id="user_card" class="user-card" style="display: none;">
+        <!-- navigation between instances -->
+        <header>
+            <div class="map-section">
+                <p>Instances: </p>
+                <a class="other_page" href="/things">things</a>
+                <a class="current_page" href="/users">users</a>
             </div>
-        </div>
+        </header>
 
-        <!-- delete all users -->
-        <div class="method-card">
-            <h1 data-description="Completely clears the users table."> /users DELETE </h1>
-            <button id="user_delete_all_btn">delete all users</button>
-        </div>
 
-        <!-- delete user by id -->
-        <div class="method-card">
-            <h1 data-description="Deletes the user with the specified user_id from the database."> /users?user_id=... DELETE </h1>
-            <input id="user_id_delete_input" type="number" placeholder="user_id" title="user_id">
-            <button id="user_id_delete_btn">delete user</button>
-        </div>
+        <main class="main-content">
+
+            <!-- generate new users -->
+            <div class="method-card">
+                <h1 data-description="Generates a given number of random users with random names, ages, and premium purchase flags."> /users/generate_users </h1>
+                <input id="cnt_gen_users" type="number" placeholder="count" 
+                    title="cnt_gen_users">
+                <button id="gen_users_btn"> generate users </button>
+            </div>
+
+            <!-- get batch of users -->
+            <div class="method-card">
+                <h1 data-description="Returns users with pagination. Parameters: count (default 5), offset (default 0)."> /users GET </h1>
+
+                <input id="users_count" type="number" placeholder="count" title="users_count">
+                <input id="users_offset" type="number" placeholder="offset" title="users_offset">
+                <button id="users_load_btn">load users</button>
+                <button id="users_clean_btn">clean loaded users table</button>
+                
+                <table id="users_table">
+                    <thead>
+                    <caption>batch of users</caption>
+                    <tr>
+                        <th>user_id</th>
+                        <th>user_name</th>
+                        <th>user_age</th>
+                        <th>bought_premium</th> 
+                    </tr>
+                    </thead>
+
+                    <tbody id="users_table_body">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- get user by id -->
+            <div class="method-card">
+                <h1 data-description="Returns the data of a specific user by their user_id."> /users?user_id=... GET </h1>
+                <input id="user_id_get_input" type="number" placeholder="user_id" title="user_id">
+                <button id="user_id_get_btn">get user</button>
+
+                <div id="user_card" class="user-card" style="display: none;">
+                </div>
+            </div>
+
+            <!-- delete all users -->
+            <div class="method-card">
+                <h1 data-description="Completely clears the users table."> /users DELETE </h1>
+                <button id="user_delete_all_btn">delete all users</button>
+            </div>
+
+            <!-- delete user by id -->
+            <div class="method-card">
+                <h1 data-description="Deletes the user with the specified user_id from the database."> /users?user_id=... DELETE </h1>
+                <input id="user_id_delete_input" type="number" placeholder="user_id" title="user_id">
+                <button id="user_id_delete_btn">delete user</button>
+            </div>
+    
+        </main>
+
+        <footer>
+            <div class="cool-footer">
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 1</p>
+                <p>row 2 col 1</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 2</p>
+                <p>row 2 col 2</p>
+                </div>
+            </div>
+        </footer>
 
     </body>
 
