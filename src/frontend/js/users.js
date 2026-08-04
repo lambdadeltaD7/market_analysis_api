@@ -171,6 +171,7 @@ user_id_get_btn.addEventListener('click', async () => {
         const result = await fetch(base_url + `/users/${uid}`);
 
         if(!result.ok){
+            higlightInputErr('user_id_get_input');
             showErr(`err:${result.statusText}`);
             throw new Error(`err:${result.statusText}`);
         }

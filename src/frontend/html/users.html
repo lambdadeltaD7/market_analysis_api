@@ -18,14 +18,15 @@
         
         <!-- generate new users -->
         <div class="method-card">
-            <h1> /users/generate_users </h1>
-            <input id="cnt_gen_users" type="number" placeholder="count" title="cnt_gen_users">
+            <h1 data-description="Generates a given number of random users with random names, ages, and premium purchase flags."> /users/generate_users </h1>
+            <input id="cnt_gen_users" type="number" placeholder="count" 
+                title="cnt_gen_users">
             <button id="gen_users_btn"> generate users </button>
         </div>
 
         <!-- get batch of users -->
         <div class="method-card">
-            <h1> /users GET </h1>
+            <h1 data-description="Returns users with pagination. Parameters: count (default 5), offset (default 0)."> /users GET </h1>
 
             <input id="users_count" type="number" placeholder="count" title="users_count">
             <input id="users_offset" type="number" placeholder="offset" title="users_offset">
@@ -52,23 +53,23 @@
 
         <!-- get user by id -->
         <div class="method-card">
-            <h1> /users?user_id=... GET </h1>
+            <h1 data-description="Returns the data of a specific user by their user_id."> /users?user_id=... GET </h1>
             <input id="user_id_get_input" type="number" placeholder="user_id" title="user_id">
             <button id="user_id_get_btn">get user</button>
 
-            <div id="user_card" style="border: 5px solid black; display: none;">
+            <div id="user_card" class="user-card" style="display: none;">
             </div>
         </div>
 
         <!-- delete all users -->
         <div class="method-card">
-            <h1> /users DELETE </h1>
+            <h1 data-description="Completely clears the users table."> /users DELETE </h1>
             <button id="user_delete_all_btn">delete all users</button>
         </div>
 
         <!-- delete user by id -->
         <div class="method-card">
-            <h1> /users?user_id=... DELETE </h1>
+            <h1 data-description="Deletes the user with the specified user_id from the database."> /users?user_id=... DELETE </h1>
             <input id="user_id_delete_input" type="number" placeholder="user_id" title="user_id">
             <button id="user_id_delete_btn">delete user</button>
         </div>

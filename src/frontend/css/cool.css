@@ -169,3 +169,62 @@ button.swal2-confirm:hover {
     border-color: var(--clr1) !important;
     color: var(--clr3) !important;
 }
+
+
+.user-card{
+    margin-top: 10px;
+    padding: 5px;
+    width: fit-content;
+    border-style: solid;
+    background-color: var(--clr1);
+    border-color: var(--clr4);
+    border-width: 3px;
+    border-radius: 5px;
+}
+
+.user-card p{
+    background-color: var(--clr2);
+    border-style: solid;
+    border-radius: 5px;
+    border-color: var(--clr2);
+}
+
+
+/* Создаем само описание (скрыто по умолчанию) */
+.method-card h1::after {
+  content: attr(data-description); 
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px); 
+  
+
+  background-color: var(--clr2);
+  color: var(--clr4);
+  border-color: var(--clr4);
+  border-style: solid;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 30px;
+  line-height: 1.4;
+  /* white-space: nowrap; Чтобы текст не переносился (если короткий) */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 10;
+  
+  /* Анимация и скрытие */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  pointer-events: none; /* Чтобы мышь не реагировала на саму подсказку */
+}
+
+
+.method-card h1:hover::after,
+.method-card h1:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0); /* Возвращаем на место при появлении */
+}
+
+
+
