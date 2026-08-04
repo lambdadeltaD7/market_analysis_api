@@ -7,6 +7,8 @@ const main_clr = one_card.style.borderColor;
 
 const loc_users_a = document.getElementById('loc_users');
 const loc_things_a = document.getElementById('loc_things');
+const loc_sales_a = document.getElementById('loc_sales');
+
 
 loc_things_a.addEventListener('mousemove', () => {
     loc_things_a.classList.remove('other_page');
@@ -27,6 +29,16 @@ loc_users_a.addEventListener('mousemove', () => {
 loc_users_a.addEventListener('mouseleave', () => {
     loc_users_a.classList.remove('current_page');
     loc_users_a.classList.add('other_page');
+});
+
+loc_sales_a.addEventListener('mousemove', () => {
+    loc_sales_a.classList.remove('other_page');
+    loc_sales_a.classList.add('current_page');
+});
+
+loc_sales_a.addEventListener('mouseleave', () => {
+    loc_sales_a.classList.remove('current_page');
+    loc_sales_a.classList.add('other_page');
 });
 
 

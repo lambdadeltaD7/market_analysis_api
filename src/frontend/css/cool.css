@@ -50,7 +50,6 @@ body{
 
 .map-section .left-link{
     position: absolute;
-    width: 3%;
     text-align: center;
     left: 2%;
     background-color: var(--clr2);

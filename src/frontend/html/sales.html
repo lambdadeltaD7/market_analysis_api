@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <title> sales </title>
+
+        <link rel="icon" href="../img/icon3.jpg">
+
+        <link rel="stylesheet" href="../css/cool.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../js/sales.js" defer></script>
+
+    </head>
+
+    <body>
+        
+        <!-- navigation between instances -->
+        <header>
+            <div class="map-section">
+                <a class="left-link" href="/">Home</a>
+                <p>Instances: </p>
+                <a id="loc_users" class="other_page" href="/users">Users</a>
+                <a id="loc_things" class="other_page" href="/things">Things</a>
+                <a id="loc_sales" class="current_page" href="/sales">Sales</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <!-- generate new sales -->
+            <div class="method-card">
+                <h1 data-description="Creates a given number of random sales using existing users and things."> /sales/generate_sales </h1>
+                <input id="cnt_gen_sales" type="number" placeholder="count" 
+                    title="cnt_gen_sales">
+                <button id="gen_sales_btn"> generate sales </button>
+            </div>
+
+            <!-- get batch of sales -->
+            <div class="method-card">
+                <h1 data-description="Returns sales with pagination. Parameters: count (default 5), offset (default 0)."> /sales GET </h1>
+
+                <input id="sales_count" type="number" placeholder="count" title="sales_count">
+                <input id="sales_offset" type="number" placeholder="offset" title="sales_offset">
+                <button id="sales_load_btn">load sales</button>
+                <button id="sales_clean_btn">clean loaded sales table</button>
+                
+                <table id="sales_table">
+                    <thead>
+                    <caption>batch of sales</caption>
+                    <tr>
+                        <th>sale_id</th>
+                        <th>user_id</th>
+                        <th>thing_id</th>
+                        <th>count</th>
+                        <th>payment_type</th>
+                        <th>sale_time</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="sales_table_body">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- get sale by id -->
+            <div class="method-card">
+                <h1 data-description="Returns the data of a specific sale by their sale_id."> /sales?sale_id=... GET </h1>
+                <input id="sale_id_get_input" type="number" placeholder="sale_id" title="sale_id">
+                <button id="sale_id_get_btn">get sale</button>
+
+                <div id="sale_card" class="sale-card" style="display: none;">
+                </div>
+            </div>
+
+            <!-- delete all sales -->
+            <div class="method-card">
+                <h1 data-description="Completely clears the sales table."> /sales DELETE </h1>
+                <button id="sale_delete_all_btn">delete all sales</button>
+            </div>
+
+            <!-- delete sale by id -->
+            <div class="method-card">
+                <h1 data-description="Deletes the sale with the specified sale_id from the database."> /sales?sale_id=... DELETE </h1>
+                <input id="sale_id_delete_input" type="number" placeholder="sale_id" title="sale_id">
+                <button id="sale_id_delete_btn">delete sale</button>
+            </div>
+        </main>
+    
+        <footer>
+            <div class="cool-footer">
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 1</p>
+                <p>row 2 col 1</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 2</p>
+                <p>row 2 col 2</p>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+
+</html>
