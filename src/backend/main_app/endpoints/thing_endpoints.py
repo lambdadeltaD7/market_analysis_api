@@ -50,7 +50,7 @@ def get_things_summary():
 
     if df.empty:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                      detail="no things in database")
+                      detail="No things in database. Consider visiting /things and generating some.")
 
     d = dict()
     d['cnt_things'] = df.shape[0]

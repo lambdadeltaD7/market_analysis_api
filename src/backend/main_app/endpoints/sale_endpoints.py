@@ -29,7 +29,8 @@ def generate_sales(count: int):
         
 
         if len(available_things) * len(available_users) == 0:
-            return {"error": "you need to add items and users before that..."}
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+            detail="To generate sales you must have ssome users and some things. Consider visitnig /users /things and generating some.")
 
     t_dict = dict()
     for tid,cat in available_things:
@@ -98,7 +99,7 @@ def get_sales_summary():
 
         if d["cnt_sales"] == 0:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                          detail="no sales in database")
+                          detail="No sales in database. Consider visiting /sales and generating some.")
 
         stmt = text("SELECT user_id, COUNT(*) FROM sales GROUP BY user_id")
         res = ses.execute(stmt).all()
@@ -112,6 +113,9 @@ def get_sales_summary():
                     LIMIT 5
                     """)
         res = ses.execute(stmt).all()
+        if len(res)==0:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                       detail='No sales in database. Consider visiting /sales and generating some sales first.')
         d["most_active_users"] = [ {"user_id":uid, "cnt_sales":cnt} for uid,cnt in res ]
         
         stmt = text("""
@@ -132,6 +136,10 @@ def get_sales_summary():
                     ORDER BY cnt DESC
                     """)
         res = ses.execute(stmt).all()
+        for cat,cnt in res:
+            if cat is None:
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+                       detail='It seems like something in sales table is referring to thing that had been deleted')
         d["cnt_per_category"] = {cat:cnt for cat,cnt in res}
         d["frac_per_category"] = {cat:cnt / d["cnt_sales"] for cat,cnt in res}
 

@@ -124,7 +124,7 @@ def get_users_summary():
 
     if df.empty:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                      detail="no users in database")
+                      detail="No users in database. Consider visiting /users and generating some.")
 
     res = dict()
 
