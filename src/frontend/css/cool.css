@@ -121,29 +121,23 @@ body{
 }
 
 
-
-
-/* 1. Настройка самой плашки (окна) */
 div.swal2-popup {
     background-color: var(--clr2) !important;
-    border: 5px solid var(--clr4) !important; /* Ваша граница */
-    border-radius: 12px !important;               /* Закругление углов */
-    font-family: 'Courier New', Courier, monospace !important; /* Ваш шрифт */
+    border: 5px solid var(--clr4) !important; 
+    border-radius: 12px !important;               
+    font-family: 'Courier New', Courier, monospace !important; 
 }
 
-/* 2. Настройка заголовка (Title) */
 h2.swal2-title {
     color: var(--clr4) !important;
     font-weight: bold !important;
 }
 
-/* 3. Настройка обычного текста (Html/Text content) */
 div.swal2-html-container {
     color: #2c2c2c !important;
     font-size: 1.1em !important;
 }
 
-/* 4. Настройка основной кнопки (Confirm Button) */
 button.swal2-confirm {
     background-color: var(--clr2) !important;
     color: var(--clr4) !important;
@@ -151,16 +145,14 @@ button.swal2-confirm {
     border-radius: 8px !important;
     font-family: 'Courier New', Courier, monospace !important;
     font-weight: bold !important;
-    box-shadow: none !important; /* Убираем дефолтную тень */
+    box-shadow: none !important; 
     transition: transform 0.2s ease;
 }
 
-/* Эффект при наведении на кнопку */
 button.swal2-confirm:hover {
     transform: scale(0.95);
 }
 
-/* 5. Настройка иконки (например, галочка успеха или крестик ошибки) */
 .swal2-icon.swal2-success {
     border-color: var(--clr1) !important;
     color: var(--clr3) !important;
@@ -190,7 +182,6 @@ button.swal2-confirm:hover {
 }
 
 
-/* Создаем само описание (скрыто по умолчанию) */
 .method-card h1::after {
   content: attr(data-description); 
   position: fixed;
@@ -207,15 +198,13 @@ button.swal2-confirm:hover {
   border-radius: 8px;
   font-size: 30px;
   line-height: 1.4;
-  /* white-space: nowrap; Чтобы текст не переносился (если короткий) */
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   z-index: 10;
   
-  /* Анимация и скрытие */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-  pointer-events: none; /* Чтобы мышь не реагировала на саму подсказку */
+  pointer-events: none;
 }
 
 
@@ -223,7 +212,7 @@ button.swal2-confirm:hover {
 .method-card h1:hover::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0); /* Возвращаем на место при появлении */
+  transform: translateX(-50%) translateY(0); 
 }
 
 
