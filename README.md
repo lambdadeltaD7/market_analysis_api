@@ -3,7 +3,7 @@
 REST API для симуляции и анализа торговой площадки: управление пользователями, товарами и событиями продаж, получение аналитических сводок и кластеризация пользователей по истории покупок.
 
 <video controls width="100%">
-  <source src="https://github.com/lambdadeltaD7/market_analysis_api/blob/master/src/frontend/vids/demo.mp4?raw=true" type="video/mp4">
+  <source src="src/frontend/vids/demo.mp4" type="video/mp4">
 </video>
 
 ## Сущности
