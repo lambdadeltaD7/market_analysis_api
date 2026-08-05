@@ -96,9 +96,9 @@ function higlightInputErr(inputId, timeMs=2000){
     setTimeout(()=>{inp.classList.remove('error');}, timeMs);
 }
 
-async function handleErr(res, pairs=null){
+async function handleErr(result, pairs=null){
     let msg = 'Unknown server error'
-    const err_body = await res.json().catch(() => ({}));
+    const err_body = await result.json().catch(() => ({}));
 
     if(typeof err_body.detail == "string"){
         msg = err_body.detail;
@@ -115,7 +115,7 @@ async function handleErr(res, pairs=null){
     }
 
     const err = new Error(msg);
-    err.status = res.status;
+    err.status = result.status;
     throw err;
 }
 
@@ -127,13 +127,13 @@ gen_sales_btn.addEventListener('click', async () => {
 
         const params = new URLSearchParams({count: cnt});
 
-        const res = await fetch(
+        const result = await fetch(
             base_url + `/sales/generate_sales?${params}`,
             {method: 'POST'}
         );
 
-        if(!res.ok){
-            await handleErr(res);
+        if(!result.ok){
+            await handleErr(result);
         }
 
         console.log(`generated ${cnt} new sales`);

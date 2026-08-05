@@ -1,6 +1,5 @@
-const gifs = ['200.gif', '201.gif', 'AMA4d7I.gif', 'anime-anime-girl.gif', 'giphy.gif', 'shigure-ui.gif'];
-
-
+const gifs = ['200.gif', '201.gif', 'AMA4d7I.gif',
+     'anime-anime-girl.gif', 'giphy.gif', 'shigure-ui.gif'];
 
 const one_card = document.getElementById('users-summary');
 const main_clr = one_card.style.borderColor;
@@ -10,6 +9,8 @@ const loc_things_a = document.getElementById('loc_things');
 const loc_sales_a = document.getElementById('loc_sales');
 
 
+
+// todo: make this more compact
 loc_things_a.addEventListener('mousemove', () => {
     loc_things_a.classList.remove('other_page');
     loc_things_a.classList.add('current_page');
@@ -19,7 +20,6 @@ loc_things_a.addEventListener('mouseleave', () => {
     loc_things_a.classList.remove('current_page');
     loc_things_a.classList.add('other_page');
 });
-
 
 loc_users_a.addEventListener('mousemove', () => {
     loc_users_a.classList.remove('other_page');
@@ -40,6 +40,7 @@ loc_sales_a.addEventListener('mouseleave', () => {
     loc_sales_a.classList.remove('current_page');
     loc_sales_a.classList.add('other_page');
 });
+
 
 
 function pickRandomGif() {
@@ -162,20 +163,28 @@ const renderers = {
 function loadSummary(cardId) {
     const { url, fn } = renderers[cardId];
     const card = document.getElementById(cardId);
+
     const h2 = card.querySelector('h2');
     while (h2.nextSibling) {
         h2.nextSibling.remove();
     }
+
     const placeholder = document.createElement('p');
     placeholder.textContent = 'Loading...';
     card.appendChild(placeholder);
+
+    
+    
     fetch(url)
-        .then(async (r) => { if (!r.ok) {
-            const err_body = await r.json().catch(() => ({}));
-            const err = new Error(err_body.detail || 'Unknown server error'); 
-            err.status = r.status;
-            throw err;
-        } return r.json(); })
+        .then(async (r) => {
+            if (!r.ok) {
+                const err_body = await r.json().catch(() => ({}));
+                const err = new Error(err_body.detail || 'Unknown server error'); 
+                err.status = r.status;
+                throw err;
+            } 
+            return r.json();     
+        })
         .then(data => {
             placeholder.remove();
             card.insertAdjacentHTML('beforeend', fn(data));
@@ -183,9 +192,9 @@ function loadSummary(cardId) {
             setTimeout(()=>{card.style.borderColor = main_clr;}, 3000);
         })
         .catch( (err) => {
+            setTimeout(()=>{card.style.borderColor = main_clr;}, 3000);
             placeholder.textContent = `Failed to load: ${err.status}(${err.message})`;
             card.style.borderColor = "rgb(241, 63, 63)";
-            setTimeout(()=>{card.style.borderColor = main_clr;}, 3000);
         });
 }
 
