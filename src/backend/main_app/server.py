@@ -64,6 +64,8 @@ app.get("/api/v1/users/{user_id}",
  summary="Получить пользователя по id",
  description="Возвращает данные конкретного пользователя по его user_id.")(get_user)
 
+app.get("/api/v1/users/clusters/centroids")(get_curr_centroids)
+
 app.get("/api/v1/users/clusters/{cluster_ix}", 
  summary="Получить всех пользователей из кластера",
  description="""

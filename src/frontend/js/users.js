@@ -18,8 +18,6 @@ const users_clean_btn = document.getElementById('users_clean_btn');
 const users_count = document.getElementById('users_count');
 const users_offset = document.getElementById('users_offset');
 const users_table_body = document.getElementById('users_table_body');
-users_count.value = '5';
-users_offset.value = '0';
 
 const user_id_get_input = document.getElementById('user_id_get_input');
 const user_id_get_btn = document.getElementById('user_id_get_btn');

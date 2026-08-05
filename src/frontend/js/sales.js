@@ -18,8 +18,7 @@ const sales_clean_btn = document.getElementById('sales_clean_btn');
 const sales_count = document.getElementById('sales_count');
 const sales_offset = document.getElementById('sales_offset');
 const sales_table_body = document.getElementById('sales_table_body');
-sales_count.value = '5';
-sales_offset.value = '0';
+
 
 const sale_id_get_input = document.getElementById('sale_id_get_input');
 const sale_id_get_btn = document.getElementById('sale_id_get_btn');

@@ -18,8 +18,7 @@ const things_clean_btn = document.getElementById('things_clean_btn');
 const things_count = document.getElementById('things_count');
 const things_offset = document.getElementById('things_offset');
 const things_table_body = document.getElementById('things_table_body');
-things_count.value = '5';
-things_offset.value = '0';
+
 
 const thing_id_get_input = document.getElementById('thing_id_get_input');
 const thing_id_get_btn = document.getElementById('thing_id_get_btn');

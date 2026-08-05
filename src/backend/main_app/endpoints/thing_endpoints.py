@@ -16,7 +16,7 @@ def add_thing(thing: Thing):
     return obj.to_dict()
 
 
-def generate_things(count: int = Query(ge=1, le=67)):
+def generate_things(count: int = Query(ge=1, le=256)):
     things = []
     means = {'electronics':6000, 'food':1000,
              'clothes':4000, 'toys':6000, 'weapons':8000}

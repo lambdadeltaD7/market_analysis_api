@@ -8,10 +8,19 @@ from logic import do_clustering
 import numpy as np
 import pandas as pd
 
+curr_centroids = None
 
-def get_cluster(cluster_ix: int):
+
+def get_cluster(cluster_ix: int,
+                count: int = Query(default=5, le=67, ge=1),
+                offset: int = Query(ge=0, default=0)):
     with Session(sql_engine) as ses:
-        query = text(f"SELECT * FROM clusters where cluster={cluster_ix}")
+        query = text(f"""
+        SELECT * FROM clusters 
+        WHERE cluster={cluster_ix}
+        LIMIT {count}
+        OFFSET {offset}
+        """)
         raw = ses.execute(query).all()
 
     if len(raw)==0:
@@ -37,7 +46,16 @@ def get_cluster(cluster_ix: int):
     return {"cluster_size":len(raw), "users":users}
 
 
-def cluster_users(n_clusters: int):
+def get_curr_centroids():
+    if curr_centroids is None:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail="There are no centroids for now.")
+    return curr_centroids
+
+
+def cluster_users(n_clusters: int = Query(ge=2, le=67)):
+    global curr_centroids
+
     with Session(sql_engine) as ses:
 
         query = text("TRUNCATE TABLE clusters;")
@@ -84,6 +102,7 @@ def cluster_users(n_clusters: int):
         df[col] = pd.to_numeric(df[col])
 
     centroids, labels = do_clustering(df, n_clusters)
+    curr_centroids = centroids
 
     df["cluster"] = labels
 
@@ -106,7 +125,7 @@ def add_user(user: User):
     return obj.to_dict()
 
 
-def generate_users(count: int = Query(ge=1, le=67)):
+def generate_users(count: int = Query(ge=1, le=256)):
 
     users = []
     for _ in range(count):

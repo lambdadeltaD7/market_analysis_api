@@ -19,7 +19,7 @@ def add_sale(sale: Sale):
     return obj.to_dict()
 
 
-def generate_sales(count: int = Query(ge=1, le=67)):
+def generate_sales(count: int = Query(ge=1, le=256)):
     with Session(sql_engine) as ses:
         stmt = select(DbUser.user_id, DbUser.user_age)
         available_users = [(uid,age) for (uid,age) in ses.execute(stmt).all()]

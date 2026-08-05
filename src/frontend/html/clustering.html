@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <title> users clustering </title>
+
+        <link rel="icon" href="../img/icon2.png">
+
+        <link rel="stylesheet" href="../css/cool.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script type="module" src="../js/clustering.js" defer></script>
+
+    </head>
+
+    <body>
+
+        <!-- navigation between instances -->
+        <header>
+            <div class="map-section">
+                <a class="left-link" href="/">Home</a>
+                <p>Clustering using kmeans</p>
+            </div>
+        </header>
+
+
+        <main class="main-content">
+            
+            <!-- go to clustering interface -->
+            <div class="method-card">
+                <h1 data-description="Go back to users interface"> users interface </h1>
+                <a id="cluster_link" class="method-link" href="/users">go to users interface</a>
+            </div>
+
+
+            <!-- run clustering -->
+            <div class="method-card">
+                <h1 data-description="Runs k-means clustering over users (based on their sales). Returns the centroids of the clusters."> /users/cluster_users POST </h1>
+
+                <input id="n_clusters" type="number" placeholder="n_clusters" title="n_clusters">
+                <button id="cluster_btn"> cluster users </button>
+                <button id="centroids_reload_btn">reload centroids table</button>
+                <button id="centroids_clean_btn">clean loaded centroids table</button>
+
+                <table id="centroids_table">
+                    <thead>
+                    <caption>clusters centroids</caption>
+                    <tr>
+                        <th>cluster</th>
+                        <th>cluster_size</th>
+                        <th>cnt_sales</th>
+                        <th>avg_price</th>
+                        <th>med_price</th>
+                        <th>user_age</th>
+                        <th>bought_premium</th>
+                        <th>mode_category</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="centroids_table_body">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- view users of a cluster -->
+            <div class="method-card">
+                <h1 data-description="Returns the users that got assigned to the cluster with the given index."> /users/clusters/{cluster_ix} GET </h1>
+
+                <input id="cluster_ix" type="number" placeholder="cluster_ix" title="cluster_ix">
+                <input id="users_count" type="number" placeholder="users_count" title="users_count">
+                <input id="users_offset" type="number" placeholder="users_offset" title="users_offset">
+                <button id="cluster_load_btn">load cluster</button>
+                <button id="cluster_users_clean_btn">clean cluster table</button>
+
+           
+
+                <table id="cluster_users_table">
+                    <thead>
+                    <caption>users in cluster</caption>
+                    <tr>
+                        <th>user_id</th>
+                        <th>cnt_sales</th>
+                        <th>avg_price</th>
+                        <th>med_price</th>
+                        <th>user_age</th>
+                        <th>bought_premium</th>
+                        <th>mode_category</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="cluster_users_table_body">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </main>
+
+        <footer>
+            <div class="cool-footer">
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 1</p>
+                <p>row 2 col 1</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                <p>row 1 col 2</p>
+                <p>row 2 col 2</p>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+
+</html>
