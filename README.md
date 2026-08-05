@@ -2,6 +2,10 @@
 
 REST API для симуляции и анализа торговой площадки: управление пользователями, товарами и событиями продаж, получение аналитических сводок и кластеризация пользователей по истории покупок.
 
+## Технологии
+
+FastAPI, SQLAlchemy, PostgreSQL, pydantic, scipy, numpy, pandas, html, javascript, nginx, docker. 
+
 ## Main page
 <div align="center">
   <img src="src/frontend/vids/main.gif" alt="Demo" width="100%" />
@@ -68,9 +72,7 @@ docker compose up
 - Доступ к API через Nginx: `http://localhost:8003/api/v1/`
 - Примеры использования API: `examples.ipynb`
 
-## Технологии
 
-FastAPI, SQLAlchemy, PostgreSQL, pydantic, scipy, numpy, pandas, html, javascript, nginx, docker. 
 
 ## Структура
 
