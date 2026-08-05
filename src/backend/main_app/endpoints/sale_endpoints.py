@@ -19,7 +19,7 @@ def add_sale(sale: Sale):
     return obj.to_dict()
 
 
-def generate_sales(count: int):
+def generate_sales(count: int = Query(ge=1, le=67)):
     with Session(sql_engine) as ses:
         stmt = select(DbUser.user_id, DbUser.user_age)
         available_users = [(uid,age) for (uid,age) in ses.execute(stmt).all()]
@@ -27,10 +27,10 @@ def generate_sales(count: int):
         stmt = select(DbThing.thing_id, DbThing.category)
         available_things = [(tid,cat) for (tid,cat) in ses.execute(stmt).all()]
         
-
         if len(available_things) * len(available_users) == 0:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-            detail="To generate sales you must have ssome users and some things. Consider visitnig /users /things and generating some.")
+            detail=("To generate sales you must have some users and some things." 
+                    "Consider visitnig /users /things and generating some."))
 
     t_dict = dict()
     for tid,cat in available_things:
@@ -173,7 +173,7 @@ def get_sales_summary():
     return d
 
 
-def get_sales(count: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
+def get_sales(count: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
         stmt = select(DbSale).order_by(DbSale.sale_id).offset(offset).limit(count)
         sales = ses.scalars(stmt).all()

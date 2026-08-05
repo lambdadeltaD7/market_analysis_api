@@ -1,6 +1,5 @@
 let base_url = "/api/v1";
 
-
 const cnt_gen_sales = document.getElementById('cnt_gen_sales');
 const gen_sales_btn = document.getElementById('gen_sales_btn');
 cnt_gen_sales.value = '13';
@@ -22,12 +21,13 @@ const sale_delete_all_btn = document.getElementById('sale_delete_all_btn');
 const sale_id_delete_input = document.getElementById('sale_id_delete_input');
 const sale_id_delete_btn = document.getElementById('sale_id_delete_btn');
 
-
 const loc_users_a = document.getElementById('loc_users');
 const loc_things_a = document.getElementById('loc_things');
 const loc_sales_a = document.getElementById('loc_sales');
 
 
+
+// todo: make this more compact
 loc_users_a.addEventListener('mousemove', () => {
     loc_sales_a.classList.remove('current_page');
     loc_sales_a.classList.add('other_page');
@@ -43,7 +43,6 @@ loc_users_a.addEventListener('mouseleave', () => {
     loc_sales_a.classList.remove('other_page');
     loc_sales_a.classList.add('current_page');
 });
-
 
 loc_things_a.addEventListener('mousemove', () => {
     loc_sales_a.classList.remove('current_page');
@@ -63,14 +62,12 @@ loc_things_a.addEventListener('mouseleave', () => {
 
 
 
-
 for(const num_input_field of [cnt_gen_sales, sales_offset,
      sales_count, sale_id_get_input, sale_id_delete_input]){
     num_input_field.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace('/\D/g',"");
     });
 }
-
 
 function showErr(txt){
     Swal.fire({
@@ -99,45 +96,56 @@ function higlightInputErr(inputId, timeMs=2000){
     setTimeout(()=>{inp.classList.remove('error');}, timeMs);
 }
 
-gen_sales_btn.addEventListener('click', async () => {
-    
-    try{
+async function handleErr(res, pairs=null){
+    let msg = 'Unknown server error'
+    const err_body = await res.json().catch(() => ({}));
 
-        if(cnt_gen_sales.value.length==0){
-            higlightInputErr('cnt_gen_sales');
-            showErr('you should specify cnt_gen_sales');
-            throw new Error(`you should specify cnt_gen_sales`);
+    if(typeof err_body.detail == "string"){
+        msg = err_body.detail;
+    }
+    else if(Array.isArray(err_body.detail)){
+        if(pairs != null){
+            for(const e of err_body.detail){
+                higlightInputErr(pairs[e.loc[1]]);
+            }
         }
+        msg = err_body.detail.map(
+            e => `${e.loc.join('.')}: ${e.msg}` 
+        ).join('; ');
+    }
 
+    const err = new Error(msg);
+    err.status = res.status;
+    throw err;
+}
+
+
+
+gen_sales_btn.addEventListener('click', async () => {
+    try{
         let cnt = Number(cnt_gen_sales.value);
 
-        const params = new URLSearchParams({
-            count: cnt
-        });
+        const params = new URLSearchParams({count: cnt});
 
-        if(cnt>67){
-            showErr(`cnt is too big: ${cnt}. max is 67`);
-            higlightInputErr('cnt_gen_sales');
-            throw new Error(`cnt is too big: ${cnt}\nmax is 67`);
-        }
-        
-        const res = await fetch(base_url + `/sales/generate_sales?${params}`, {
-            method: 'POST'
-        });
+        const res = await fetch(
+            base_url + `/sales/generate_sales?${params}`,
+            {method: 'POST'}
+        );
 
         if(!res.ok){
-            throw new Error(`failed to generate sales l1: ${res.status}`);
+            await handleErr(res);
         }
 
         console.log(`generated ${cnt} new sales`);
         showToast(`generated ${cnt} new sales`)
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to generate sales: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('cnt_gen_sales');
     }
 });
-
-
 
 sales_clean_btn.addEventListener('click', () => {
     sales_table_body.innerHTML = '';
@@ -145,35 +153,22 @@ sales_clean_btn.addEventListener('click', () => {
 
 sales_load_btn.addEventListener('click', async () => {
     try{
-        if(sales_count.value.length==0){
-            showErr(`you should specify sales_count`);
-            higlightInputErr('sales_count');
-            throw new Error(`you should specify sales_count`);
-        }
-
-        if(sales_offset.value.length==0){
-            showErr(`you should specify sales_offset`);
-            higlightInputErr('sales_offset');
-            throw new Error(`you should specify sales_offset`);
-        }
-
-        if( Number(sales_count.value) > 67 ){
-            higlightInputErr('sales_count');
-            showErr(`${Number(sales_count.value)} rows is too many. max is 67`);
-            throw new Error(`${Number(sales_count.value)} rows is too many\nmax is 67`);
-        }
-
         const params = new URLSearchParams({
-            limit: Number(sales_count.value),
+            count: Number(sales_count.value),
             offset: Number(sales_offset.value)
-        })
+        });
 
-        const result = await fetch(base_url + `/sales?${params}`,{
-            method: 'GET'
-        })
+        const result = await fetch(
+            base_url + `/sales?${params}`,
+            {method: 'GET'}
+        );
 
         if(!result.ok){
-            throw new Error("failed to get sales");
+            await handleErr(
+                result,
+                {"count"  : "sales_count",
+                 "offset" : "sales_offset"}
+            );
         }
 
         const data = await result.json();
@@ -197,30 +192,22 @@ sales_load_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to load sales: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
     }
 });
 
-
 sale_id_get_btn.addEventListener('click', async () => {
     try{
-        if(sale_id_get_input.value.length==0){
-            showErr(`you must specify sale_id`);
-            higlightInputErr('sale_id_get_input');
-            throw new Error('you must specify sale_id');
-        }
-
         const sid = Number(sale_id_get_input.value);
 
         const result = await fetch(base_url + `/sales/${sid}`);
 
         if(!result.ok){
-            higlightInputErr('sale_id_get_input');
-            showErr(`err:${result.statusText}`);
-            throw new Error(`err:${result.statusText}`);
+            await handleErr(result);
         }
         
-
         const sale = await result.json();
         sale_card.innerHTML = '';
         sale_card.style.display = 'block';
@@ -232,11 +219,12 @@ sale_id_get_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to get sale: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('sale_id_get_input');
     }
 });
-
-
 
 sale_delete_all_btn.addEventListener('click', async () => {
     try{
@@ -252,20 +240,23 @@ sale_delete_all_btn.addEventListener('click', async () => {
 
 sale_id_delete_btn.addEventListener('click', async () => {
     try{
-        if(sale_id_delete_input.value.length==0){
-            showErr(`you must specify sale_id`);
-            higlightInputErr('sale_id_delete_input');
-            throw new Error('you must specify sale_id');
-        }
-
         const result = await fetch(
             base_url + `/sales/${Number(sale_id_delete_input.value)}`,
-             {method: 'DELETE'});
+            {method: 'DELETE'}
+        );
+        
+        if(!result){
+            await handleErr(result);
+        }
+
         const data = await result.json();
         showToast(data.log);
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to delete sale: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('sale_id_delete_input');
     }
 
 });
