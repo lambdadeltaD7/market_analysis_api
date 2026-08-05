@@ -63,5 +63,5 @@ tests/                        # pytest-тесты
 ```
 
 ## Demo
-<video src="./src/frontend/vids/demo.mp4" controls width="100%">
+<video src="https://raw.githubusercontent.com/lambdadeltaD7/market_analysis_api/refs/heads/master/src/frontend/vids/demo.mp4" controls width="100%">
 </video>
