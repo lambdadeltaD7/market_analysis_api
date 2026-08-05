@@ -173,9 +173,9 @@ def get_sales_summary():
     return d
 
 
-def get_sales(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
+def get_sales(count: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbSale).order_by(DbSale.sale_id).offset(offset).limit(limit)
+        stmt = select(DbSale).order_by(DbSale.sale_id).offset(offset).limit(count)
         sales = ses.scalars(stmt).all()
     return [s.to_dict() for s in sales]
 

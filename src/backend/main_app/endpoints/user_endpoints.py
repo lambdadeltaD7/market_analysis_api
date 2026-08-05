@@ -155,9 +155,9 @@ def get_users_summary():
     return res
 
 
-def get_users(limit: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
+def get_users(count: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbUser).order_by(DbUser.user_id).offset(offset).limit(limit)
+        stmt = select(DbUser).order_by(DbUser.user_id).offset(offset).limit(count)
         users = ses.scalars(stmt).all()
     return [u.to_dict() for u in users]
 

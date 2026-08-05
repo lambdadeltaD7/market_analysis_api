@@ -1,6 +1,5 @@
 let base_url = "/api/v1";
 
-
 const cnt_gen_things = document.getElementById('cnt_gen_things');
 const gen_things_btn = document.getElementById('gen_things_btn');
 cnt_gen_things.value = '13';
@@ -22,12 +21,13 @@ const thing_delete_all_btn = document.getElementById('thing_delete_all_btn');
 const thing_id_delete_input = document.getElementById('thing_id_delete_input');
 const thing_id_delete_btn = document.getElementById('thing_id_delete_btn');
 
-
 const loc_users_a = document.getElementById('loc_users');
 const loc_things_a = document.getElementById('loc_things');
 const loc_sales_a = document.getElementById('loc_sales');
 
 
+
+// todo: make this more compact
 loc_users_a.addEventListener('mousemove', () => {
     loc_things_a.classList.remove('current_page');
     loc_things_a.classList.add('other_page');
@@ -62,14 +62,13 @@ loc_sales_a.addEventListener('mouseleave', () => {
 
 
 
-
+// so user can only input 0-9 inside numeric fields
 for(const num_input_field of [cnt_gen_things, things_offset,
      things_count, thing_id_get_input, thing_id_delete_input]){
     num_input_field.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace('/\D/g',"");
     });
 }
-
 
 function showErr(txt){
     Swal.fire({
@@ -98,45 +97,55 @@ function higlightInputErr(inputId, timeMs=2000){
     setTimeout(()=>{inp.classList.remove('error');}, timeMs);
 }
 
-gen_things_btn.addEventListener('click', async () => {
-    
-    try{
+async function handleErr(res, pairs=null){
+    let msg = 'Unknown server error'
+    const err_body = await res.json().catch(() => ({}));
 
-        if(cnt_gen_things.value.length==0){
-            higlightInputErr('cnt_gen_things');
-            showErr('you should specify cnt_gen_things');
-            throw new Error(`you should specify cnt_gen_things`);
+    if(typeof err_body.detail == "string"){
+        msg = err_body.detail;
+    }
+    else if(Array.isArray(err_body.detail)){
+        if(pairs != null){
+            for(const e of err_body.detail){
+                higlightInputErr(pairs[e.loc[1]]);
+            }
         }
+        msg = err_body.detail.map(
+            e => `${e.loc.join('.')}: ${e.msg}` 
+        ).join('; ');
+    }
 
+    const err = new Error(msg);
+    err.status = res.status;
+    throw err;
+}
+
+
+gen_things_btn.addEventListener('click', async () => {
+    try{
         let cnt = Number(cnt_gen_things.value);
 
-        const params = new URLSearchParams({
-            count: cnt
-        });
-
-        if(cnt>67){
-            showErr(`cnt is too big: ${cnt}. max is 67`);
-            higlightInputErr('cnt_gen_things');
-            throw new Error(`cnt is too big: ${cnt}\nmax is 67`);
-        }
+        const params = new URLSearchParams({count: cnt});
         
-        const res = await fetch(base_url + `/things/generate_things?${params}`, {
-            method: 'POST'
-        });
+        const res = await fetch(
+            base_url + `/things/generate_things?${params}`, 
+            {method: 'POST'}
+        );
 
         if(!res.ok){
-            throw new Error(`failed to generate things l1: ${res.status}`);
+            await handleErr(res);
         }
 
         console.log(`generated ${cnt} new things`);
-        showToast(`generated ${cnt} new things`)
+        showToast(`generated ${cnt} new things`);
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to generate things: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('cnt_gen_things');
     }
 });
-
-
 
 things_clean_btn.addEventListener('click', () => {
     things_table_body.innerHTML = '';
@@ -144,36 +153,23 @@ things_clean_btn.addEventListener('click', () => {
 
 things_load_btn.addEventListener('click', async () => {
     try{
-        if(things_count.value.length==0){
-            showErr(`you should specify things_count`);
-            higlightInputErr('things_count');
-            throw new Error(`you should specify things_count`);
-        }
-
-        if(things_offset.value.length==0){
-            showErr(`you should specify things_offset`);
-            higlightInputErr('things_offset');
-            throw new Error(`you should specify things_offset`);
-        }
-
-        if( Number(things_count.value) > 67 ){
-            higlightInputErr('things_count');
-            showErr(`${Number(things_count.value)} rows is too many. max is 67`);
-            throw new Error(`${Number(things_count.value)} rows is too many\nmax is 67`);
-        }
-
         const params = new URLSearchParams({
-            limit: Number(things_count.value),
+            count: Number(things_count.value),
             offset: Number(things_offset.value)
-        })
+        });
 
-        const result = await fetch(base_url + `/things?${params}`,{
-            method: 'GET'
-        })
+        const result = await fetch(
+            base_url + `/things?${params}`,
+            {method: 'GET'}
+        );
 
         if(!result.ok){
-            throw new Error("failed to get things");
-        }
+            await handleErr(
+                result,
+                {"count"  : "things_count",
+                 "offset" : "things_offset"}
+            );
+        };
 
         const data = await result.json();
 
@@ -193,30 +189,22 @@ things_load_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to load things: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
     }
 });
 
-
 thing_id_get_btn.addEventListener('click', async () => {
     try{
-        if(thing_id_get_input.value.length==0){
-            showErr(`you must specify thing_id`);
-            higlightInputErr('thing_id_get_input');
-            throw new Error('you must specify thing_id');
-        }
-
         const tid = Number(thing_id_get_input.value);
 
         const result = await fetch(base_url + `/things/${tid}`);
 
         if(!result.ok){
-            higlightInputErr('thing_id_get_input');
-            showErr(`err:${result.statusText}`);
-            throw new Error(`err:${result.statusText}`);
+            await handleErr(result);
         }
         
-
         const thing = await result.json();
         thing_card.innerHTML = '';
         thing_card.style.display = 'block';
@@ -228,11 +216,12 @@ thing_id_get_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to get thing: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('thing_id_get_input');
     }
 });
-
-
 
 thing_delete_all_btn.addEventListener('click', async () => {
     try{
@@ -248,20 +237,23 @@ thing_delete_all_btn.addEventListener('click', async () => {
 
 thing_id_delete_btn.addEventListener('click', async () => {
     try{
-        if(thing_id_delete_input.value.length==0){
-            showErr(`you must specify thing_id`);
-            higlightInputErr('thing_id_delete_input');
-            throw new Error('you must specify thing_id');
-        }
-
         const result = await fetch(
             base_url + `/things/${Number(thing_id_delete_input.value)}`,
-             {method: 'DELETE'});
+            {method: 'DELETE'}
+        );
+
+        if(!result.ok){
+            await handleErr(result);
+        }
+
         const data = await result.json();
         showToast(data.log);
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to delete thing: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('thing_id_delete_input');
     }
 
 });

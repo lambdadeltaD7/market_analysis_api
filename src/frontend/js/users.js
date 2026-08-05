@@ -69,8 +69,6 @@ for(const num_input_field of [cnt_gen_users, users_offset,
     });
 }
 
-
-
 function showErr(txt){
     Swal.fire({
             icon: 'error',
@@ -98,6 +96,30 @@ function higlightInputErr(inputId, timeMs=3000){
     setTimeout(()=>{inp.classList.remove('error');}, timeMs);
 }
 
+async function handleErr(res, pairs=null){
+    let msg = 'Unknown server error'
+    const err_body = await res.json().catch(() => ({}));
+
+    if(typeof err_body.detail == "string"){
+        msg = err_body.detail;
+    }
+    else if(Array.isArray(err_body.detail)){
+        if(pairs != null){
+            for(const e of err_body.detail){
+                higlightInputErr(pairs[e.loc[1]]);
+            }
+        }
+        msg = err_body.detail.map(
+            e => `${e.loc.join('.')}: ${e.msg}` 
+        ).join('; ');
+    }
+
+    const err = new Error(msg);
+    err.status = res.status;
+    throw err;
+}
+
+
 
 gen_users_btn.addEventListener('click', async () => {
     try{
@@ -111,21 +133,7 @@ gen_users_btn.addEventListener('click', async () => {
         );
 
         if(!res.ok){
-            let msg = 'Unknown server error'
-            const err_body = await res.json().catch(() => ({}));
-
-            if(typeof err_body.detail == "string"){
-                msg = err_body.detail;
-            }
-            else if(Array.isArray(err_body.detail)){
-                msg = err_body.detail.map(
-                    e => `${e.loc.join('.')}: ${e.msg}` 
-                ).join('; ');
-            }
-
-            const err = new Error(msg);
-            err.status = res.status;
-            throw err;
+            await handleErr(res);
         }
 
         console.log(`generated ${cnt} new users`);
@@ -146,7 +154,7 @@ users_clean_btn.addEventListener('click', () => {
 users_load_btn.addEventListener('click', async () => {
     try{
         const params = new URLSearchParams({
-            limit: Number(users_count.value),
+            count: Number(users_count.value),
             offset: Number(users_offset.value)
         });
 
@@ -156,25 +164,11 @@ users_load_btn.addEventListener('click', async () => {
         );
 
         if(!result.ok){
-            const err_body = await result.json().catch(() => ({}));
-            let msg = 'Unknown server error';
-
-            if(typeof err_body.detail == "string"){
-                msg = err_body.detail;
-            }
-            else if(Array.isArray(err_body.detail)){
-                for(const e of err_body.detail){
-                    if(e.loc[1]=="limit") higlightInputErr("users_count");
-                    if(e.loc[1]=="offset") higlightInputErr("users_offset");
-                }
-                msg = err_body.detail.map(
-                    e => `${e.loc.join('.')}: ${e.msg}`
-                ).join('; ');
-            }
-
-            const err = new Error(msg);
-            err.status = result.status;
-            throw err;
+            await handleErr(
+                result,
+                {"count"  : "users_count",
+                 "offset" : "users_offset"}
+            );
         }
 
         const data = await result.json();
@@ -210,10 +204,7 @@ user_id_get_btn.addEventListener('click', async () => {
         const result = await fetch(base_url + `/users/${uid}`);
 
         if(!result.ok){
-            const err_body = await result.json().catch(()=>({}));
-            const err = new Error(err_body.detail || 'Unknown server error');
-            err.status = result.status;
-            throw err;
+            await handleErr(result);
         }
         
         const user = await result.json();
@@ -258,10 +249,7 @@ user_id_delete_btn.addEventListener('click', async () => {
         );
         
         if(!result.ok){
-            const err_body = await result.json().catch(() => ({}));
-            const err = new Error(err_body.detail || "Unknown server error");
-            err.status = result.status;
-            throw err;
+            await handleErr(result);
         }
         
         const data = await result.json();

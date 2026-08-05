@@ -16,7 +16,7 @@ def add_thing(thing: Thing):
     return obj.to_dict()
 
 
-def generate_things(count: int):
+def generate_things(count: int = Query(ge=1, le=67)):
     things = []
     means = {'electronics':6000, 'food':1000,
              'clothes':4000, 'toys':6000, 'weapons':8000}
@@ -63,9 +63,9 @@ def get_things_summary():
     return d
 
 
-def get_things(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
+def get_things(count: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
-        stmt = select(DbThing).order_by(DbThing.thing_id).offset(offset).limit(limit)
+        stmt = select(DbThing).order_by(DbThing.thing_id).offset(offset).limit(count)
         things = ses.scalars(stmt).all()
     return [t.to_dict() for t in things]
 
