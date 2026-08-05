@@ -63,5 +63,7 @@ tests/                        # pytest-тесты
 ```
 
 ## Demo
-<video src="https://raw.githubusercontent.com/lambdadeltaD7/market_analysis_api/refs/heads/master/src/frontend/vids/demo.mp4" controls width="100%">
+<video controls width="100%">
+  <source src="https://cdn.jsdelivr.net/gh/lambdadeltaD7/market_analysis_api@master/src/frontend/vids/demo.mp4" type="video/mp4">
+  Ваш браузер не поддерживает видео.
 </video>
