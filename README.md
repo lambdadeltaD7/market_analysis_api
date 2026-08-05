@@ -2,11 +2,42 @@
 
 REST API для симуляции и анализа торговой площадки: управление пользователями, товарами и событиями продаж, получение аналитических сводок и кластеризация пользователей по истории покупок.
 
+## Main page
+<div align="center">
+  <img src="src/frontend/vids/main.gif" alt="Demo" width="100%" />
+</div>
+
 ## Сущности
 
 - **users** — пользователи (`user_id`, `user_name`, `user_age`, `bought_premium`)
 - **things** — товары (`thing_id`, `category`, `price`), категории: `electronics`, `food`, `clothes`, `toys`, `weapons`
 - **sales** — продажи (`sale_id`, `user_id`, `thing_id`, `count`, `payment_type`), тип оплаты: `card` / `nalik`
+
+## Users interface
+
+<div align="center">
+  <img src="src/frontend/vids/users.gif" alt="Demo" width="100%" />
+</div>
+
+## Things interface
+
+<div align="center">
+  <img src="src/frontend/vids/things.gif" alt="Demo" width="100%" />
+</div>
+
+## Sales interface
+
+<div align="center">
+  <img src="src/frontend/vids/sales.gif" alt="Demo" width="100%" />
+</div>
+
+## Clustering interface
+
+<div align="center">
+  <img src="src/frontend/vids/clustering.gif" alt="Demo" width="100%" />
+</div>
+
+
 
 ## Возможности
 
@@ -58,7 +89,9 @@ src/
 │   ├── css/
 │   ├── html/
 │   ├── img/
+│   ├── vids/
 │   └── js/
 tests/                        # pytest-тесты
 ```
+
 
