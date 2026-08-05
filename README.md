@@ -61,3 +61,7 @@ src/
 │   └── js/
 tests/                        # pytest-тесты
 ```
+
+## Demo
+<video src="./src/frontend/vids/demo.mp4" controls width="100%">
+</video>
