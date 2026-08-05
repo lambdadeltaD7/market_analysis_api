@@ -206,3 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pickRandomGif();
     loadAllSummaries();
 });
+
+document.getElementById('random-gif').addEventListener('click', pickRandomGif);
+
+setInterval(pickRandomGif, 10000);
