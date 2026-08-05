@@ -63,7 +63,7 @@ def get_things_summary():
     return d
 
 
-def get_things(count: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
+def get_things(count: int = Query(default=5, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
         stmt = select(DbThing).order_by(DbThing.thing_id).offset(offset).limit(count)
         things = ses.scalars(stmt).all()

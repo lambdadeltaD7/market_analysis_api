@@ -23,6 +23,13 @@ def get_cluster(cluster_ix: int,
         """)
         raw = ses.execute(query).all()
 
+
+        query = text(f"""
+        SELECT COUNT(*) FROM clusters 
+        WHERE cluster={cluster_ix}
+        """)
+        cluster_size = ses.execute(query).one()[0]
+
     if len(raw)==0:
        raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -43,7 +50,7 @@ def get_cluster(cluster_ix: int,
         d["mode_category"] = x[8]
         users.append(d)
 
-    return {"cluster_size":len(raw), "users":users}
+    return {"cluster_size":cluster_size, "users":users}
 
 
 def get_curr_centroids():
@@ -174,7 +181,7 @@ def get_users_summary():
     return res
 
 
-def get_users(count: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
+def get_users(count: int = Query(default=5, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
         stmt = select(DbUser).order_by(DbUser.user_id).offset(offset).limit(count)
         users = ses.scalars(stmt).all()
