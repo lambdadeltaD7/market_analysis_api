@@ -2,6 +2,9 @@
 
 REST API для симуляции и анализа торговой площадки: управление пользователями, товарами и событиями продаж, получение аналитических сводок и кластеризация пользователей по истории покупок.
 
+## Demo
+<video src="src/frontend/vids/demo.mp4" controls width="100%"></video>
+
 ## Сущности
 
 - **users** — пользователи (`user_id`, `user_name`, `user_age`, `bought_premium`)
@@ -62,8 +65,4 @@ src/
 tests/                        # pytest-тесты
 ```
 
-## Demo
-<video controls width="100%">
-  <source src="https://cdn.jsdelivr.net/gh/lambdadeltaD7/market_analysis_api@master/src/frontend/vids/demo.mp4" type="video/mp4">
-  Ваш браузер не поддерживает видео.
-</video>
+
