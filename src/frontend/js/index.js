@@ -172,7 +172,7 @@ function loadSummary(cardId) {
     fetch(url)
         .then(async (r) => { if (!r.ok) {
             const err_body = await r.json().catch(() => ({}));
-            const err = new Error(err_body.detail); 
+            const err = new Error(err_body.detail || 'Unknown server error'); 
             err.status = r.status;
             throw err;
         } return r.json(); })

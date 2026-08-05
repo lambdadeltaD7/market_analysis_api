@@ -26,7 +26,7 @@ const loc_things_a = document.getElementById('loc_things');
 const loc_sales_a = document.getElementById('loc_sales');
 
 
-
+// todo: make this more compact
 loc_things_a.addEventListener('mousemove', () => {
     loc_users_a.classList.remove('current_page');
     loc_users_a.classList.add('other_page');
@@ -59,12 +59,16 @@ loc_sales_a.addEventListener('mouseleave', () => {
     loc_users_a.classList.add('current_page');
 });
 
+
+
+// so user can only input 0-9 inside numeric fields
 for(const num_input_field of [cnt_gen_users, users_offset,
      users_count, user_id_get_input, user_id_delete_input]){
     num_input_field.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace('/\D/g',"");
     });
 }
+
 
 
 function showErr(txt){
@@ -87,52 +91,53 @@ function showToast(txt){
         });
 }
 
-function higlightInputErr(inputId, timeMs=2000){
+function higlightInputErr(inputId, timeMs=3000){
     const inp = document.getElementById(inputId);
     if (!inp) return;
     inp.classList.add('error');
     setTimeout(()=>{inp.classList.remove('error');}, timeMs);
 }
 
+
 gen_users_btn.addEventListener('click', async () => {
-    
     try{
-
-        if(cnt_gen_users.value.length==0){
-            higlightInputErr('cnt_gen_users');
-            showErr('you should specify cnt_gen_users');
-            throw new Error(`you should specify cnt_gen_users`);
-        }
-
         let cnt = Number(cnt_gen_users.value);
 
-        const params = new URLSearchParams({
-            count: cnt
-        });
-
-        if(cnt>67){
-            showErr(`cnt is too big: ${cnt}. max is 67`);
-            higlightInputErr('cnt_gen_users');
-            throw new Error(`cnt is too big: ${cnt}\nmax is 67`);
-        }
+        const params = new URLSearchParams({count: cnt});
         
-        const res = await fetch(base_url + `/users/generate_users?${params}`, {
-            method: 'POST'
-        });
+        const res = await fetch(
+            base_url + `/users/generate_users?${params}`, 
+            {method: 'POST'}
+        );
 
         if(!res.ok){
-            throw new Error(`failed to generate users l1: ${res.status}`);
+            let msg = 'Unknown server error'
+            const err_body = await res.json().catch(() => ({}));
+
+            if(typeof err_body.detail == "string"){
+                msg = err_body.detail;
+            }
+            else if(Array.isArray(err_body.detail)){
+                msg = err_body.detail.map(
+                    e => `${e.loc.join('.')}: ${e.msg}` 
+                ).join('; ');
+            }
+
+            const err = new Error(msg);
+            err.status = res.status;
+            throw err;
         }
 
         console.log(`generated ${cnt} new users`);
         showToast(`generated ${cnt} new users`)
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to generate users: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('cnt_gen_users');
     }
 });
-
-
 
 users_clean_btn.addEventListener('click', () => {
     users_table_body.innerHTML = '';
@@ -140,35 +145,36 @@ users_clean_btn.addEventListener('click', () => {
 
 users_load_btn.addEventListener('click', async () => {
     try{
-        if(users_count.value.length==0){
-            showErr(`you should specify users_count`);
-            higlightInputErr('users_count');
-            throw new Error(`you should specify users_count`);
-        }
-
-        if(users_offset.value.length==0){
-            showErr(`you should specify users_offset`);
-            higlightInputErr('users_offset');
-            throw new Error(`you should specify users_offset`);
-        }
-
-        if( Number(users_count.value) > 67 ){
-            higlightInputErr('users_count');
-            showErr(`${Number(users_count.value)} rows is too many. max is 67`);
-            throw new Error(`${Number(users_count.value)} rows is too many\nmax is 67`);
-        }
-
         const params = new URLSearchParams({
             limit: Number(users_count.value),
             offset: Number(users_offset.value)
-        })
+        });
 
-        const result = await fetch(base_url + `/users?${params}`,{
-            method: 'GET'
-        })
+        const result = await fetch(
+            base_url + `/users?${params}`,
+            {method: 'GET'}
+        );
 
         if(!result.ok){
-            throw new Error("failed to get users");
+            const err_body = await result.json().catch(() => ({}));
+            let msg = 'Unknown server error';
+
+            if(typeof err_body.detail == "string"){
+                msg = err_body.detail;
+            }
+            else if(Array.isArray(err_body.detail)){
+                for(const e of err_body.detail){
+                    if(e.loc[1]=="limit") higlightInputErr("users_count");
+                    if(e.loc[1]=="offset") higlightInputErr("users_offset");
+                }
+                msg = err_body.detail.map(
+                    e => `${e.loc.join('.')}: ${e.msg}`
+                ).join('; ');
+            }
+
+            const err = new Error(msg);
+            err.status = result.status;
+            throw err;
         }
 
         const data = await result.json();
@@ -190,30 +196,26 @@ users_load_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to load users: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
     }
 });
 
-
 user_id_get_btn.addEventListener('click', async () => {
     try{
-        if(user_id_get_input.value.length==0){
-            showErr(`you must specify user_id`);
-            higlightInputErr('user_id_get_input');
-            throw new Error('you must specify user_id');
-        }
 
         const uid = Number(user_id_get_input.value);
 
         const result = await fetch(base_url + `/users/${uid}`);
 
         if(!result.ok){
-            higlightInputErr('user_id_get_input');
-            showErr(`err:${result.statusText}`);
-            throw new Error(`err:${result.statusText}`);
+            const err_body = await result.json().catch(()=>({}));
+            const err = new Error(err_body.detail || 'Unknown server error');
+            err.status = result.status;
+            throw err;
         }
         
-
         const user = await result.json();
         user_card.innerHTML = '';
         user_card.style.display = 'block';
@@ -225,15 +227,19 @@ user_id_get_btn.addEventListener('click', async () => {
 
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to get user: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('user_id_get_input');
     }
 });
 
-
-
 user_delete_all_btn.addEventListener('click', async () => {
     try{
-        const result = await fetch(base_url + '/users', {method: 'DELETE'});
+        const result = await fetch(
+            base_url + '/users',
+            {method: 'DELETE'}
+        );
         const data = await result.json();
         showToast(data.log);
     }
@@ -245,20 +251,27 @@ user_delete_all_btn.addEventListener('click', async () => {
 
 user_id_delete_btn.addEventListener('click', async () => {
     try{
-        if(user_id_delete_input.value.length==0){
-            showErr(`you must specify user_id`);
-            higlightInputErr('user_id_delete_input');
-            throw new Error('you must specify user_id');
-        }
 
         const result = await fetch(
             base_url + `/users/${Number(user_id_delete_input.value)}`,
-             {method: 'DELETE'});
+            {method: 'DELETE'}
+        );
+        
+        if(!result.ok){
+            const err_body = await result.json().catch(() => ({}));
+            const err = new Error(err_body.detail || "Unknown server error");
+            err.status = result.status;
+            throw err;
+        }
+        
         const data = await result.json();
         showToast(data.log);
     }
     catch(err){
-        console.error(`Some error here l2: ${err}`);
+        const txt = `Failed to delete user: ${err.status}(${err.message})`;
+        console.error(txt);
+        showErr(txt);
+        higlightInputErr('user_id_delete_input');
     }
 
 });

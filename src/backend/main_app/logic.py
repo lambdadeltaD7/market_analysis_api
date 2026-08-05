@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.cluster.vq import kmeans2
 
-def do_cluster(_df, n_clusters):
+def do_clustering(_df, n_clusters):
     
     df = _df.copy()
 

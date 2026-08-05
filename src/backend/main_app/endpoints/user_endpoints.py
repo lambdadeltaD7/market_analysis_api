@@ -4,7 +4,7 @@ from sqlalchemy import select, delete, text
 from sqlalchemy.orm import Session
 from models import *
 from db import sql_engine
-from logic import do_cluster
+from logic import do_clustering
 import numpy as np
 import pandas as pd
 
@@ -15,7 +15,10 @@ def get_cluster(cluster_ix: int):
         raw = ses.execute(query).all()
 
     if len(raw)==0:
-        return {"error": f"there is no cluster with cluster_ix={cluster_ix}"}
+       raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=(f"There is no cluster with cluster_ix={cluster_ix}. "
+                 "Maybe you should use POST /users/cluster_users first?"))
 
     users = []
 
@@ -32,6 +35,7 @@ def get_cluster(cluster_ix: int):
         users.append(d)
 
     return {"cluster_size":len(raw), "users":users}
+
 
 def cluster_users(n_clusters: int):
     with Session(sql_engine) as ses:
@@ -57,14 +61,29 @@ def cluster_users(n_clusters: int):
 
         ses.commit()
 
+
+
     df = pd.DataFrame([x for x in res], 
                      columns=['user_id', 'cnt_sales', 'avg_price', 
                             'med_price', 'user_age', 'bought_premium',
                             'mode_category'])
+    
+    if df.shape[0] == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=("Users are clustered based on their sales. "
+                      "But it seems like sales table is empty. "
+                      "Consider using /sales/generate_sales."))
+
+    if pd.isna(df).sum().sum() != 0:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="It seems like something in sales table referring to deleted users or things")
+
     for col in ['user_id', 'med_price', 'cnt_sales', 'avg_price','user_age']:
         df[col] = pd.to_numeric(df[col])
 
-    centroids, labels = do_cluster(df, n_clusters)
+    centroids, labels = do_clustering(df, n_clusters)
 
     df["cluster"] = labels
 
@@ -87,7 +106,8 @@ def add_user(user: User):
     return obj.to_dict()
 
 
-def generate_users(count: int):
+def generate_users(count: int = Query(ge=1, le=67)):
+
     users = []
     for _ in range(count):
         d=dict()
@@ -114,7 +134,6 @@ def generate_users(count: int):
     return [u.to_dict() for u in users[:10]]
 
 
-
 def get_users_summary():
     with Session(sql_engine) as ses:
         stmt = select(DbUser.user_age, DbUser.bought_premium)
@@ -136,7 +155,7 @@ def get_users_summary():
     return res
 
 
-def get_users(limit: int = Query(default=100, ge=0), offset: int = Query(default=0, ge=0)):
+def get_users(limit: int = Query(default=100, ge=1, le=67), offset: int = Query(default=0, ge=0)):
     with Session(sql_engine) as ses:
         stmt = select(DbUser).order_by(DbUser.user_id).offset(offset).limit(limit)
         users = ses.scalars(stmt).all()
