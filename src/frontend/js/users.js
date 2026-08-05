@@ -1,4 +1,13 @@
-let base_url = "/api/v1";
+import {
+    handleErr,
+    higlightInputErr,
+    showErr,
+    showToast
+} from "./utils.js" 
+
+
+
+const base_url = "/api/v1";
 
 const cnt_gen_users = document.getElementById('cnt_gen_users');
 const gen_users_btn = document.getElementById('gen_users_btn');
@@ -67,56 +76,6 @@ for(const num_input_field of [cnt_gen_users, users_offset,
     num_input_field.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace('/\D/g',"");
     });
-}
-
-function showErr(txt){
-    Swal.fire({
-            icon: 'error',
-            title: 'Input error',
-            text: txt,
-            });
-}
-
-function showToast(txt){
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: txt,
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true
-        });
-}
-
-function higlightInputErr(inputId, timeMs=3000){
-    const inp = document.getElementById(inputId);
-    if (!inp) return;
-    inp.classList.add('error');
-    setTimeout(()=>{inp.classList.remove('error');}, timeMs);
-}
-
-async function handleErr(result, pairs=null){
-    let msg = 'Unknown server error'
-    const err_body = await result.json().catch(() => ({}));
-
-    if(typeof err_body.detail == "string"){
-        msg = err_body.detail;
-    }
-    else if(Array.isArray(err_body.detail)){
-        if(pairs != null){
-            for(const e of err_body.detail){
-                higlightInputErr(pairs[e.loc[1]]);
-            }
-        }
-        msg = err_body.detail.map(
-            e => `${e.loc.join('.')}: ${e.msg}` 
-        ).join('; ');
-    }
-
-    const err = new Error(msg);
-    err.status = result.status;
-    throw err;
 }
 
 
