@@ -1,21 +1,26 @@
 :root{
     --clr1: #F4ADC5;
+    --clr1_5: #EEA3BC;
     --clr2: #e596b1e3;
+    --clr2notopac: #e596b2;
     --clr3: #CF7F96;
     --clr4: #a95a70;
     --clr5: #6a2639;
+    --greeny: rgb(18, 199, 18);
 }
 
 body{
     background-color: var(--clr1);
     margin: 0;
     padding: 0;
+    /* background: linear-gradient(140deg, var(--clr1), var(--clr2) 50%); */
     display: flex;
     flex-direction: column;
     min-height: 100vh; 
 }
 
 .main-content {
+    
     flex: 1 0 auto; 
 }
 
@@ -25,12 +30,14 @@ body{
     justify-content: space-evenly;
     border-width: 100%;
     width: 100%;
+    background: linear-gradient(to bottom, var(--clr2), var(--clr3));
     margin-top: 20px;
-    background-color: var(--clr2);
+    /* background-color: var(--clr2); */
     border-top: 5px solid var(--clr3);
     font-family: 'Courier New', Courier, monospace;
     align-items: center;
     gap: 30px;
+    
 }
 
 .map-section{
@@ -41,7 +48,8 @@ body{
     /* position: relative; */
     width: 100%;
     margin-bottom: 20px;
-    background-color: var(--clr2);
+    /* background-color: var(--clr2); */
+    background: linear-gradient(to top, var(--clr2), var(--clr3));
     border-bottom: 5px solid var(--clr3);
     font-family: 'Courier New', Courier, monospace;
     align-items: center;
@@ -96,8 +104,11 @@ body{
     border-width: 5px;
     border-radius: 10px; 
     padding: 10px; 
+    background-color: var(--clr1);
+    /* background: linear-gradient(140deg, var(--clr1), var(--clr1_5) 80%); */
+    box-shadow: 10px 10px 10px  rgba(0,0,0,0.1);
     font-family: 'Courier New', Courier, monospace;
-    margin: 10px;
+    margin: 20px;
 }
 
 .method-card input{
@@ -254,12 +265,10 @@ button.swal2-confirm:hover {
 }
 
 .swal2-icon.swal2-success {
-    border-color: var(--clr1) !important;
-    color: var(--clr3) !important;
+    border-color: var(--greeny) !important;
 }
 .swal2-icon.swal2-success [class^='swal2-success-line'] {
-    border-color: var(--clr1) !important;
-    color: var(--clr3) !important;
+    background-color: var(--greeny) !important;
 }
 
 
@@ -294,7 +303,7 @@ button.swal2-confirm:hover {
   transform: translateX(-50%) translateY(-10px); 
   
 
-  background-color: var(--clr2);
+  background-color: var(--clr2notopac);
   color: var(--clr4);
   border-color: var(--clr4);
   border-style: solid;
@@ -302,7 +311,7 @@ button.swal2-confirm:hover {
   border-radius: 8px;
   font-size: 30px;
   line-height: 1.4;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 10px 10px 30px rgba(0,0,0,0.25);
   z-index: 10;
   
   opacity: 0;
@@ -331,7 +340,9 @@ button.swal2-confirm:hover {
     border-color: var(--clr3);
     border-width: 5px;
     border-radius: 10px;
+    box-shadow: 10px 10px 10px  rgba(0,0,0,0.1);
     padding: 10px;
+    margin: 10px;
     font-family: 'Courier New', Courier, monospace;
     background-color: var(--clr2);
 }
@@ -409,6 +420,7 @@ button.swal2-confirm:hover {
 
 .gif-container img {
     max-width: 400px;
+    box-shadow: 10px 10px 10px  rgba(0,0,0,0.1);
     border-radius: 10px;
     border: 3px solid var(--clr3);
 }
